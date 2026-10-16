@@ -117,9 +117,10 @@ export function TextTransform({ modes, initialInput = '', options, live = true, 
           </Button>
         )}
       </div>
-      {options}
       {sizeWarning && <RestrictionNotice>{sizeWarning}</RestrictionNotice>}
-      <div className="grid gap-3 lg:grid-cols-2">
+      <div className="flex flex-col overflow-hidden rounded-xl border bg-card [&_[data-slot=options-bar]]:rounded-none [&_[data-slot=options-bar]]:border-0 [&_[data-slot=options-bar]]:border-b">
+      {options}
+      <div className="grid gap-3 p-3 lg:grid-cols-2">
         <section className="flex min-w-0 flex-col gap-2">
           <div className="flex min-h-8 items-center">
             <PaneTitle>Input</PaneTitle>
@@ -137,6 +138,7 @@ export function TextTransform({ modes, initialInput = '', options, live = true, 
           <ErrorBox error={error} />
           <CodeEditor value={output} language={mode.outputLanguage ?? mode.inputLanguage} readOnly label="Tool output" testId="tool-output" />
         </section>
+      </div>
       </div>
     </div>
   );

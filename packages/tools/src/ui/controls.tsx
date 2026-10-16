@@ -1,5 +1,5 @@
 import { useEffect, useId, useState, type ReactNode } from 'react';
-import { AlertTriangle, Check, ChevronDown, Copy, Download, Loader2 } from 'lucide-react';
+import { AlertTriangle, Check, ChevronDown, Copy, Download, Info, Loader2 } from 'lucide-react';
 import { TOOL_EVENTS } from '../core/host';
 import { Button as ShadButton } from './shadcn/button';
 import { Input } from './shadcn/input';
@@ -38,9 +38,13 @@ export function Button({
   );
 }
 
-/** Row of options above the panes. */
+/** Row of options above the panes. Inside TextTransform and GeneratorTool it becomes the tray of the work surface. */
 export function OptionsBar({ children }: { children: ReactNode }) {
-  return <div className="flex flex-wrap items-end gap-4 rounded-lg border bg-card p-3">{children}</div>;
+  return (
+    <div data-slot="options-bar" className="flex flex-wrap items-end gap-4 rounded-lg border bg-muted/40 p-3">
+      {children}
+    </div>
+  );
 }
 
 export function Field({ label, children, hint }: { label: string; children: (id: string) => ReactNode; hint?: string }) {
@@ -207,22 +211,25 @@ export function ErrorBox({ error }: { error: string | null }) {
   );
 }
 
+const noticeClass = 'rounded-lg border border-l-4 border-l-info-foreground bg-info text-sm text-info-foreground';
+
 /**
- * Restriction notice. Collapsed behind a one-line summary unless the user must act on it or would be
+ * Restriction notice: a calm information notice (not an error), shown before the user starts; the Tool is never blocked.
+ * Collapsed behind a one-line summary unless the user must act on it or would be
  * misled without it (`essential`), so routine heads-ups do not crowd the Tool.
  */
 export function RestrictionNotice({ children, essential = false }: { children: ReactNode; essential?: boolean }) {
   if (essential)
     return (
-      <div className="flex items-start gap-2 rounded-lg bg-warning px-3 py-2 text-sm text-warning-foreground" data-testid="restriction">
-        <AlertTriangle className="mt-0.5 size-4 shrink-0" />
+      <div className={cn('flex items-start gap-2 px-3 py-2', noticeClass)} data-testid="restriction">
+        <Info className="mt-0.5 size-4 shrink-0" />
         <div className="flex-1">{children}</div>
       </div>
     );
   return (
-    <details className="group rounded-lg bg-warning text-sm text-warning-foreground" data-testid="restriction">
+    <details className={cn('group', noticeClass)} data-testid="restriction">
       <summary className="flex cursor-pointer list-none items-center gap-2 px-3 py-1.5 select-none">
-        <AlertTriangle className="size-4 shrink-0" />
+        <Info className="size-4 shrink-0" />
         <span className="flex-1">Heads-up</span>
         <ChevronDown className="size-4 transition-transform group-open:rotate-180" />
       </summary>
@@ -235,9 +242,9 @@ export function RestrictionNotice({ children, essential = false }: { children: R
 export function RestrictionNotes({ messages }: { messages: readonly string[] }) {
   if (!messages.length) return null;
   return (
-    <details className="group rounded-lg bg-warning text-sm text-warning-foreground" data-testid="restrictions">
+    <details className={cn('group', noticeClass)} data-testid="restrictions">
       <summary className="flex cursor-pointer list-none items-center gap-2 px-3 py-1.5 select-none">
-        <AlertTriangle className="size-4 shrink-0" />
+        <Info className="size-4 shrink-0" />
         <span className="flex-1">Good to know before you start ({messages.length})</span>
         <ChevronDown className="size-4 transition-transform group-open:rotate-180" />
       </summary>

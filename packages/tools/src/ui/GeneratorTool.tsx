@@ -33,8 +33,9 @@ export function GeneratorTool({ generate, options, language = 'text', filename =
 
   return (
     <div className="flex flex-col gap-3">
+      <div className="flex flex-col overflow-hidden rounded-xl border bg-card [&_[data-slot=options-bar]]:rounded-none [&_[data-slot=options-bar]]:border-0 [&_[data-slot=options-bar]]:border-b">
       {options}
-      <section className="flex min-w-0 flex-col gap-2">
+      <section className="flex min-w-0 flex-col gap-2 p-3">
         <div className="flex min-h-8 flex-wrap items-center gap-2">
           <PaneTitle>Output</PaneTitle>
           <span className="flex-1" />
@@ -49,6 +50,7 @@ export function GeneratorTool({ generate, options, language = 'text', filename =
         <ErrorBox error={error} />
         <CodeEditor value={output} language={language} readOnly label="Tool output" testId="tool-output" />
       </section>
+      </div>
     </div>
   );
 }

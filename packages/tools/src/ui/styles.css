@@ -181,6 +181,14 @@
   }
 }
 
+/* Default pane size: half the viewport, growing to fill the screen on large displays. Utility classes (h-56, !h-40, min-h-0) override it. */
+@layer components {
+  .u-editor { height: 50vh; min-height: 18rem; }
+  @media (min-width: 64rem) {
+    .u-editor { height: calc(100svh - 22rem); }
+  }
+}
+
 /* CodeMirror theming to match the tokens: dense, flat, monospaced. */
 .u-editor .cm-editor { height: 100%; background: var(--card); color: var(--card-foreground); }
 .u-editor .cm-editor.cm-focused { outline: none; }

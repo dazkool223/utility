@@ -1,9 +1,10 @@
 import { lazy, Suspense, useEffect, useState } from 'react';
 import { Link, Route, Switch, useLocation } from 'wouter';
-import { getTool } from '@/core/registry';
+import { getTool, getToolByPath } from '@/core/registry';
 import { registerNavigate, TOOL_EVENTS } from '@/core/host';
 import { Header } from './components/Header';
 import { Rail } from './components/Rail';
+import { cn } from '@/ui/lib/utils';
 import { HomePage } from './pages/HomePage';
 import { CategoryPage } from './pages/CategoryPage';
 import { AzPage } from './pages/AzPage';
@@ -19,7 +20,8 @@ const CommandPalette = lazy(() => import('./components/CommandPalette').then((m)
 
 /** The app shell shared by the Website and the Extension (ADR 0002). Routing is provided by the caller. */
 export function App({ surface = { surface: 'website', websiteUrl: WEBSITE_URL } }: { surface?: SurfaceConfig }) {
-  const [, navigate] = useLocation();
+  const [location, navigate] = useLocation();
+  const onToolPage = !!getToolByPath(location);
   const [paletteOpen, setPaletteOpen] = useState(false);
   const [paletteLoaded, setPaletteLoaded] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -75,7 +77,7 @@ export function App({ surface = { surface: 'website', websiteUrl: WEBSITE_URL } 
             </div>
           </aside>
           <div className="flex min-w-0 flex-1 flex-col">
-        <main id="main" tabIndex={-1} className="mx-auto w-full max-w-7xl flex-1 px-4 py-6 outline-none sm:px-6">
+        <main id="main" tabIndex={-1} className={cn('mx-auto w-full flex-1 px-4 py-6 outline-none sm:px-6', !onToolPage && 'max-w-7xl')}>
           <Suspense fallback={null}>
           <Switch>
             <Route path="/" component={HomePage} />

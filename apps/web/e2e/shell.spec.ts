@@ -158,12 +158,75 @@ test.describe('Home bench', () => {
     await expect(output(page)).toContainText('1234567890');
   });
 
+  test('pasting anywhere on the page runs Smart Paste without focusing the bar first', async ({ page }) => {
+    await page.goto('/');
+    await page.getByRole('heading', { level: 1 }).click();
+    await expect(page.getByTestId('home-search')).not.toBeFocused();
+    await page.evaluate((text) => {
+      const data = new DataTransfer();
+      data.setData('text/plain', text);
+      const event = new ClipboardEvent('paste', { bubbles: true, cancelable: true });
+      Object.defineProperty(event, 'clipboardData', { value: data }); // Firefox ignores clipboardData in the constructor
+      document.body.dispatchEvent(event);
+    }, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMjM0NTY3ODkwIn0.dozjgNryP4J3jVmNHl0w5N_XgL0n3I9PlFUP0THsR8U');
+    await expect(page.getByTestId('smart-paste-result').getByRole('button').first()).toHaveAttribute('data-testid', 'smart-jwt-decode');
+    await expect(page.getByTestId('home-search')).toBeFocused();
+  });
+
   test('empty Favourites, empty Recent and no-match states have friendly copy', async ({ page }) => {
     await page.goto('/');
     await expect(page.getByRole('region', { name: 'Favourites' })).toContainText('Nothing pinned yet');
     await expect(page.getByRole('region', { name: 'Recent' })).toContainText('Tools you open will show up here');
     await page.getByTestId('home-search').fill('zzzqqqxxx');
     await expect(page.getByText(/Nothing called/)).toBeVisible();
+  });
+});
+
+test.describe('Tool page', () => {
+  test('header shows the name, description and breadcrumb, with an icon-only Favourite control', async ({ page }) => {
+    await page.goto('/json/format');
+    await expect(page.getByRole('heading', { level: 1, name: 'JSON Formatter' })).toBeVisible();
+    await expect(page.getByTestId('tool-page').getByText('Pretty-print and validate JSON')).toBeVisible();
+    const star = page.getByRole('button', { name: 'Add to favourites' });
+    await expect(star).toHaveText('');
+    await star.click();
+    await expect(page.getByRole('button', { name: 'Remove from favourites' })).toHaveAttribute('aria-pressed', 'true');
+    await page.reload();
+    await expect(page.getByRole('button', { name: 'Remove from favourites' })).toBeVisible();
+  });
+
+  test('"Works well with" lists related Tools and opens one', async ({ page }) => {
+    await page.goto('/json/format');
+    await page.getByLabel('Works well with').selectOption({ index: 1 });
+    await expect(page).not.toHaveURL(/\/json\/format$/);
+    await expect(page.getByTestId('tool-page')).toBeVisible();
+  });
+
+  test('panes use the available width and height on a large screen, and stack on a small one', async ({ page }) => {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await page.goto('/json/format');
+    const input = (await page.getByTestId('tool-input').boundingBox())!;
+    const out = (await page.getByTestId('tool-output').boundingBox())!;
+    expect(input.height).toBeGreaterThan(350);
+    expect(input.width).toBeGreaterThan(400);
+    expect(out.x).toBeGreaterThan(input.x + input.width - 2);
+    await page.setViewportSize({ width: 600, height: 900 });
+    const inSmall = (await page.getByTestId('tool-input').boundingBox())!;
+    const outSmall = (await page.getByTestId('tool-output').boundingBox())!;
+    expect(outSmall.y).toBeGreaterThan(inSmall.y + inSmall.height - 2);
+  });
+
+  test('Restrictions are shown before the user starts, and the Tool still works', async ({ page }) => {
+    await page.goto('/images/convert');
+    await expect(page.getByTestId('restrictions')).toBeVisible();
+    await expect(page.getByTestId('file-input')).toBeAttached();
+  });
+
+  test('a Heavy Tool explains its first-use download once, in the header', async ({ page }) => {
+    await page.goto('/pdf/ocr');
+    await expect(page.getByText(/Downloads its engine the first time/)).toHaveCount(1);
+    await page.goto('/json/format');
+    await expect(page.getByText(/Downloads its engine/)).toHaveCount(0);
   });
 });
 

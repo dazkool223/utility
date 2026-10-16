@@ -104,7 +104,7 @@ export function CodeEditor({ value, onChange, language = 'text', readOnly, place
 
   return (
     <div
-      className={cn('u-editor h-[60vh] max-h-[70vh] min-h-72 overflow-hidden rounded-lg border bg-card', className)}
+      className={cn('u-editor overflow-hidden rounded-lg border bg-card', className)}
       ref={host}
       data-testid={testId}
       data-readonly={readOnly ? '' : undefined}

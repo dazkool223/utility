@@ -78,6 +78,24 @@ export function Bench({ text, onTextChange }: { text: string; onTextChange: (tex
     }
   };
 
+  // Paste works anywhere on the home page, without focusing the bar first. Pastes into other fields are left alone.
+  useEffect(() => {
+    const onDocPaste = (e: globalThis.ClipboardEvent) => {
+      const el = e.target as HTMLElement | null;
+      if (!el || el.closest('[data-testid="home-search"]')) return; // the bar's own handler covers this
+      if (el.closest('input, textarea, select, [contenteditable]:not([contenteditable="false"])')) return;
+      const files = Array.from(e.clipboardData?.files ?? []);
+      const pasted = e.clipboardData?.getData('text') ?? '';
+      if (!files.length && !pasted) return;
+      e.preventDefault();
+      if (files.length) void fromFiles(files);
+      else onTextChange(pasted);
+      document.querySelector<HTMLTextAreaElement>('[data-testid="home-search"]')?.focus();
+    };
+    document.addEventListener('paste', onDocPaste);
+    return () => document.removeEventListener('paste', onDocPaste);
+  });
+
   const onDrop = (e: DragEvent) => {
     e.preventDefault();
     setOver(false);
