@@ -2,15 +2,16 @@ import { lazy, Suspense, useEffect, useState } from 'react';
 import { Link, Route, Switch, useLocation } from 'wouter';
 import { getTool } from '@/core/registry';
 import { registerNavigate, TOOL_EVENTS } from '@/core/host';
-import { TooltipProvider } from '@/ui/shadcn/tooltip';
 import { Header } from './components/Header';
+import { Rail } from './components/Rail';
 import { HomePage } from './pages/HomePage';
 import { ToolPage } from './pages/ToolPage';
-import { PrivacyPage } from './pages/PrivacyPage';
 import { NotFound } from './pages/NotFound';
 import { SurfaceContext, WEBSITE_URL, type SurfaceConfig } from './surface';
 
 // Loaded on first open to keep the app shell small.
+const PrivacyPage = lazy(() => import('./pages/PrivacyPage').then((m) => ({ default: m.PrivacyPage })));
+const MobileMenu = lazy(() => import('./components/MobileMenu').then((m) => ({ default: m.MobileMenu })));
 const CommandPalette = lazy(() => import('./components/CommandPalette').then((m) => ({ default: m.CommandPalette })));
 
 
@@ -19,6 +20,11 @@ export function App({ surface = { surface: 'website', websiteUrl: WEBSITE_URL } 
   const [, navigate] = useLocation();
   const [paletteOpen, setPaletteOpen] = useState(false);
   const [paletteLoaded, setPaletteLoaded] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [menuLoaded, setMenuLoaded] = useState(false);
+  useEffect(() => {
+    if (menuOpen) setMenuLoaded(true);
+  }, [menuOpen]);
   useEffect(() => {
     if (paletteOpen) setPaletteLoaded(true);
   }, [paletteOpen]);
@@ -52,16 +58,30 @@ export function App({ surface = { surface: 'website', websiteUrl: WEBSITE_URL } 
 
   return (
     <SurfaceContext.Provider value={surface}>
-    <TooltipProvider delayDuration={300}>
       <div className="flex min-h-svh flex-col">
-        <Header onOpenPalette={() => setPaletteOpen(true)} />
-        <main className="mx-auto w-full max-w-7xl flex-1 px-4 py-6 sm:px-6">
+        <a
+          href="#main"
+          className="sr-only focus:not-sr-only focus:absolute focus:z-50 focus:m-2 focus:rounded-md focus:bg-primary focus:px-3 focus:py-1.5 focus:text-primary-foreground"
+        >
+          Skip to content
+        </a>
+        <Header onOpenMenu={() => setMenuOpen(true)} />
+        <div className="flex flex-1">
+          <aside aria-label="Sidebar" className="hidden w-64 shrink-0 border-r lg:block">
+            <div className="sticky top-14 max-h-[calc(100svh-3.5rem)] overflow-y-auto">
+              <Rail />
+            </div>
+          </aside>
+          <div className="flex min-w-0 flex-1 flex-col">
+        <main id="main" tabIndex={-1} className="mx-auto w-full max-w-7xl flex-1 px-4 py-6 outline-none sm:px-6">
+          <Suspense fallback={null}>
           <Switch>
             <Route path="/" component={HomePage} />
             <Route path="/privacy" component={PrivacyPage} />
             <Route path="/:category/:slug">{(params) => <ToolPage path={`${params.category}/${params.slug}`} />}</Route>
             <Route component={NotFound} />
           </Switch>
+          </Suspense>
         </main>
         <footer className="border-t py-4 text-center text-xs text-muted-foreground">
           Everything runs in your browser. Nothing you enter leaves your device.{' '}
@@ -77,13 +97,19 @@ export function App({ surface = { surface: 'website', websiteUrl: WEBSITE_URL } 
             </>
           )}
         </footer>
+          </div>
+        </div>
       </div>
+      {menuLoaded && (
+        <Suspense fallback={null}>
+          <MobileMenu open={menuOpen} onOpenChange={setMenuOpen} onOpenPalette={() => setPaletteOpen(true)} />
+        </Suspense>
+      )}
       {paletteLoaded && (
         <Suspense fallback={null}>
           <CommandPalette open={paletteOpen} onOpenChange={setPaletteOpen} />
         </Suspense>
       )}
-    </TooltipProvider>
     </SurfaceContext.Provider>
   );
 }

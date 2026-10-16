@@ -7,7 +7,6 @@ import { searchTools } from '@/core/search';
 import { Input } from '@/ui/shadcn/input';
 import { ToolCard } from '../components/ToolCard';
 import { SmartPaste } from '../components/SmartPaste';
-import { DeveloperToggle } from '../components/DeveloperToggle';
 import { useDeveloperTools } from '../audience';
 import { usePreferences } from '../theme';
 
@@ -55,7 +54,6 @@ export function HomePage() {
         <>
           {favouriteTools.length > 0 && <ToolGroup title="Favourites" tools={favouriteTools} />}
           {recentTools.length > 0 && <ToolGroup title="Recent" tools={recentTools} />}
-          <DeveloperToggle />
           {browseCategories(TOOLS, showDeveloper).map((c) => (
             <ToolGroup key={c.id} id={c.id} category={c} title={c.name} subtitle={c.description} tools={browseCategoryTools(TOOLS, c.id, showDeveloper)} />
           ))}

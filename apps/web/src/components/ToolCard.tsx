@@ -1,7 +1,7 @@
+import { useId } from 'react';
 import { Link } from 'wouter';
 import { categoryColour, categoryIcon, categoryName } from '@/core/categories';
 import type { ToolMeta } from '@/core/types';
-import { Tooltip, TooltipContent, TooltipTrigger } from '@/ui/shadcn/tooltip';
 
 /**
  * A Tool in a list. Browse grids show the name and the Category colour edge only; the description appears on hover and focus.
@@ -26,15 +26,25 @@ export function ToolCard({ tool, detailed = false }: { tool: ToolMeta; detailed?
       </Link>
     );
   }
+  return <BrowseCard tool={tool} className={className} edge={edge} />;
+}
+
+/** Name-only card; the description is a CSS tooltip shown on hover and keyboard focus (kept out of Radix to protect the shell budget). */
+function BrowseCard({ tool, className, edge }: { tool: ToolMeta; className: string; edge: { borderLeftColor: string } }) {
+  const tipId = useId();
   return (
-    <Tooltip>
-      <TooltipTrigger asChild>
-        <Link href={`/${tool.path}`} className={`${className} text-sm font-medium`} style={edge} data-testid={`tool-card-${tool.id}`}>
-          {tool.name}
-        </Link>
-      </TooltipTrigger>
-      <TooltipContent className="max-w-64">{tool.description}</TooltipContent>
-    </Tooltip>
+    <div className="group relative">
+      <Link href={`/${tool.path}`} className={`${className} text-sm font-medium`} style={edge} aria-describedby={tipId} data-testid={`tool-card-${tool.id}`}>
+        {tool.name}
+      </Link>
+      <span
+        id={tipId}
+        role="tooltip"
+        className="pointer-events-none invisible absolute top-full left-0 z-30 mt-1 w-max max-w-64 rounded-md bg-foreground px-3 py-1.5 text-xs text-background shadow-lg group-focus-within:visible group-hover:visible"
+      >
+        {tool.description}
+      </span>
+    </div>
   );
 }
 

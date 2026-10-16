@@ -124,7 +124,66 @@ test.describe('Category identity', () => {
   });
 });
 
-const devSwitch = (page: Page) => page.getByRole('switch', { name: 'Developer tools' });
+const rail = (page: Page) => page.getByRole('navigation', { name: 'Browse Tools' });
+
+test.describe('Persistent rail', () => {
+  test('is on the home page and Tool pages, with the switch, Categories and no header search button', async ({ page }) => {
+    for (const path of ['/', '/pdf/merge', '/privacy']) {
+      await page.goto(path);
+      await expect(rail(page)).toBeVisible();
+      await expect(rail(page).getByRole('switch', { name: 'Developer tools' })).toBeVisible();
+      await expect(rail(page).getByRole('link', { name: 'Images' })).toBeVisible();
+      await expect(page.getByTestId('open-palette')).toHaveCount(0);
+    }
+    await page.goto('/');
+    await expect(page.getByRole('searchbox')).toHaveCount(1);
+  });
+
+  test('Categories in the rail respect the switch', async ({ page }) => {
+    await page.goto('/');
+    const formats = rail(page).getByRole('link', { name: 'YAML, XML, TOML & CSV' });
+    await expect(formats).toHaveCount(0);
+    await rail(page).getByRole('switch', { name: 'Developer tools' }).click();
+    await expect(formats).toBeVisible();
+  });
+
+  test('Favourites and Recent Tools show in the rail on a Tool page, whatever the switch says', async ({ page }) => {
+    await page.goto('/json/format');
+    await page.getByTestId('favourite').click();
+    await page.goto('/pdf/merge');
+    await expect(rail(page).getByRole('switch', { name: 'Developer tools' })).not.toBeChecked();
+    await expect(page.getByTestId('rail-favourite-json-format')).toBeVisible();
+    await expect(page.getByTestId('rail-recent-json-format')).toBeVisible();
+    await expect(page.getByTestId('rail-recent-pdf-merge')).toBeVisible();
+  });
+
+  test('the switch and links work from the keyboard', async ({ page }) => {
+    await page.goto('/');
+    const toggle = rail(page).getByRole('switch', { name: 'Developer tools' });
+    await toggle.focus();
+    await page.keyboard.press('Space');
+    await expect(toggle).toBeChecked();
+    await rail(page).getByRole('link', { name: 'Images' }).focus();
+    await page.keyboard.press('Enter');
+    await expect(page).toHaveURL(/\/#images$/);
+  });
+
+  test('on a narrow screen the rail collapses into a menu, and the palette shortcut still works', async ({ page }) => {
+    await page.setViewportSize({ width: 600, height: 900 });
+    await page.goto('/pdf/merge');
+    await expect(rail(page)).toBeHidden();
+    await page.getByRole('button', { name: 'Open menu' }).click();
+    await expect(rail(page)).toBeVisible();
+    await expect(rail(page).getByRole('switch', { name: 'Developer tools' })).toBeVisible();
+    await rail(page).getByRole('button', { name: /Find a Tool/ }).click();
+    await expect(page.getByTestId('palette')).toBeVisible();
+    await page.keyboard.press('Escape');
+    await page.keyboard.press(`${MOD}+k`);
+    await expect(page.getByTestId('palette')).toBeVisible();
+  });
+});
+
+const devSwitch = (page: Page) => rail(page).getByRole('switch', { name: 'Developer tools' });
 
 test.describe('Developer tools switch', () => {
   test('is off by default: browsing hides developer Tools and developer-only Categories', async ({ page }) => {
