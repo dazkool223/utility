@@ -1,0 +1,13 @@
+{
+  "name": "utility-platform",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "pnpm --filter web dev",
+    "build": "pnpm -r build",
+    "test": "pnpm -r test",
+    "e2e": "pnpm --filter web e2e",
+    "typecheck": "pnpm -r typecheck"
+  },
+  "packageManager": "pnpm@11.6.0"
+}

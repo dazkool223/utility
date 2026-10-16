@@ -1,0 +1,14 @@
+@import "../../../packages/tools/src/ui/styles.css";
+@source "./";
+@source "../../web/src/";
+
+/* Quick Launcher popup: fixed size, compact editors. */
+body.popup {
+  width: 720px;
+  height: 560px;
+  overflow: hidden;
+}
+body.popup .u-editor {
+  height: 150px;
+  min-height: 150px;
+}

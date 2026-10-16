@@ -1,0 +1,3 @@
+# Monorepo with one shared Tools package for Website and Extension
+
+The product ships on two Surfaces (the Website and the browser Extension) that launch together. Every Tool is written once in a shared `packages/tools` workspace package, knows nothing about the Surface it runs on, and declares its own metadata (Category, whether it is a Heavy Tool, which browser features it needs). `apps/web` and `apps/extension` are thin shells that filter the catalog by that metadata. We chose this over building the Extension as a wrapper around the Website build, because Manifest V3 forbids remotely hosted code and imposes its own CSP, which makes a straight re-export of the Website fragile.
