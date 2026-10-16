@@ -38,10 +38,11 @@ export function HomePage() {
 
 function ToolGroup({ id, category, title, subtitle, tools, empty }: { id?: string; category?: Category; title: string; subtitle?: string; tools: readonly ToolMeta[]; empty?: string }) {
   const Icon = category?.icon;
+  const headingId = `group-${(id ?? title).replace(/\s+/g, '-').toLowerCase()}`; // an id must not contain spaces to label the region
   return (
-    <section id={id} aria-labelledby={`${title}-h`} className="flex flex-col gap-3">
+    <section id={id} aria-labelledby={headingId} className="flex flex-col gap-3">
       <div className="flex items-baseline gap-3">
-        <h2 id={`${title}-h`} className={category ? 'flex items-center gap-2 font-serif text-lg font-semibold' : 'text-base font-semibold'}>
+        <h2 id={headingId} className={category ? 'flex items-center gap-2 font-serif text-lg font-semibold' : 'text-base font-semibold'}>
           {Icon && <Icon className="size-4" style={{ color: categoryColour(category!.id) }} aria-hidden />}
           {category ? <Link href={`/category/${category.id}`} className="hover:underline">{title}</Link> : title}
         </h2>

@@ -291,6 +291,47 @@ test.describe('Privacy chip', () => {
   });
 });
 
+test.describe('Quality pass', () => {
+  test('after the first visit the app, its Tools and its fonts work offline', async ({ page, context }) => {
+    await page.goto('/');
+    await page.evaluate(() => navigator.serviceWorker.ready.then(() => true));
+    await page.reload(); // from here on the page is controlled by the service worker
+    await context.setOffline(true);
+    await page.reload();
+    await expect(page.getByRole('heading', { level: 1 })).toContainText('Hello');
+    const faces = await page.evaluate(async () => {
+      const loaded = await Promise.all([document.fonts.load('16px "Figtree Variable"'), document.fonts.load('600 24px "Fraunces Variable"'), document.fonts.load('14px "JetBrains Mono Variable"')]);
+      return loaded.map((l) => l.length);
+    });
+    expect(faces.every((n) => n > 0)).toBe(true);
+    await page.getByTestId('tool-card-pdf-merge').click();
+    await expect(page.getByTestId('tool-page')).toBeVisible();
+    await expect(page.getByTestId('file-input')).toBeAttached();
+    await context.setOffline(false);
+  });
+
+  test('landmarks are in place and the skip link and rail come before the page content in the tab order', async ({ page, browserName }) => {
+    test.skip(browserName === 'webkit', 'Safari/WebKit does not Tab to links unless the system setting is on');
+    await page.goto('/pdf/merge');
+    await expect(page.getByRole('banner')).toBeVisible();
+    await expect(page.getByRole('complementary', { name: 'Sidebar' })).toBeVisible();
+    await expect(page.getByRole('navigation', { name: 'Browse Tools' })).toBeVisible();
+    await expect(page.getByRole('main')).toBeVisible();
+    await page.keyboard.press('Tab');
+    await expect(page.getByRole('link', { name: 'Skip to content' })).toBeFocused();
+    const order: string[] = [];
+    for (let i = 0; i < 14; i++) {
+      await page.keyboard.press('Tab');
+      order.push(await page.evaluate(() => (() => { const el = document.activeElement as HTMLButtonElement | null; return (el?.getAttribute('aria-label') ?? el?.labels?.[0]?.textContent ?? el?.textContent ?? '').trim(); })()));
+    }
+    expect(order.indexOf('Developer tools')).toBeGreaterThan(-1);
+    expect(order.some((n) => /^Works well with|^Add to favourites/.test(n))).toBe(false); // the page content comes after the rail
+    await page.getByRole('link', { name: 'Skip to content' }).focus();
+    await page.keyboard.press('Enter');
+    await expect(page).toHaveURL(/#main$/);
+  });
+});
+
 const cardIds = (page: Page) =>
   page.locator('[data-testid^=tool-card-]').evaluateAll((els) => els.map((e) => e.getAttribute('data-testid')!.replace('tool-card-', '')));
 
