@@ -95,6 +95,35 @@ test('a new visitor gets the dark theme; light and system can be chosen and pers
   await expect(theme('System')).toBeChecked();
 });
 
+test.describe('Category identity', () => {
+  test('browse cards show the name only; the description appears on hover and on keyboard focus', async ({ page }) => {
+    await page.goto('/');
+    const card = page.getByTestId('tool-card-pdf-merge');
+    await expect(card).toHaveText('Merge PDFs');
+    await card.hover();
+    await expect(page.getByRole('tooltip')).toContainText('Combine several PDF files');
+    await page.reload();
+    await card.focus();
+    await expect(page.getByRole('tooltip')).toContainText('Combine several PDF files');
+  });
+
+  test('search results show the description and Category', async ({ page }) => {
+    await page.goto('/');
+    await page.getByTestId('home-search').fill('merge pdf');
+    const card = page.getByTestId('tool-card-pdf-merge');
+    await expect(card).toContainText('PDF');
+    await expect(card).toContainText(/Merge/);
+    expect((await card.innerText()).length).toBeGreaterThan('Merge PDFs'.length + 5);
+  });
+
+  test('Category headings are listed and a card still opens its Tool', async ({ page }) => {
+    await page.goto('/');
+    await expect(page.getByRole('heading', { name: 'PDF' })).toBeVisible();
+    await page.getByTestId('tool-card-pdf-merge').click();
+    await expect(page).toHaveURL(/\/pdf\/merge$/);
+  });
+});
+
 const devSwitch = (page: Page) => page.getByRole('switch', { name: 'Developer tools' });
 
 test.describe('Developer tools switch', () => {

@@ -4,7 +4,8 @@ import { Command as CommandPrimitive } from 'cmdk';
 import { Eraser, Moon, Sparkles, Star, Wrench } from 'lucide-react';
 import { TOOLS, getToolByPath, toolsForKinds } from '@/core/registry';
 import { searchTools } from '@/core/search';
-import { categoryName } from '@/core/categories';
+import { categoryColour, categoryIcon, categoryName } from '@/core/categories';
+import type { CategoryId } from '@/core/types';
 import { detectText } from '@/core/detect';
 import { setPendingInput } from '@/core/host';
 import { clearPreferences, getPreferences, setTheme, toggleFavourite } from '@/core/preferences';
@@ -120,7 +121,7 @@ export function CommandPalette({ open, onOpenChange }: { open: boolean; onOpenCh
               <CommandGroup heading={query ? 'Tools' : 'All Tools'}>
                 {results.map((t) => (
                   <CommandItem key={t.id} value={t.id} onSelect={() => openTool(t.id)} data-testid={`palette-item-${t.id}`}>
-                    <Wrench />
+                    <CategoryMark id={t.category} />
                     <span className="flex-1 truncate">{t.name}</span>
                     {t.audience === 'developer' && <DevTag />}
                     <CommandShortcut>{categoryName(t.category)}</CommandShortcut>
@@ -172,4 +173,9 @@ export function CommandPalette({ open, onOpenChange }: { open: boolean; onOpenCh
       </DialogContent>
     </Dialog>
   );
+}
+
+function CategoryMark({ id }: { id: CategoryId }) {
+  const Icon = categoryIcon(id);
+  return <Icon style={{ color: categoryColour(id) }} aria-hidden />;
 }

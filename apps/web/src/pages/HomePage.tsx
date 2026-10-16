@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react';
 import { Search } from 'lucide-react';
 import { TOOLS, getTool } from '@/core/registry';
 import { browseCategories, browseCategoryTools } from '@/core/audience';
+import { categoryColour, type Category } from '@/core/categories';
 import { searchTools } from '@/core/search';
 import { Input } from '@/ui/shadcn/input';
 import { ToolCard } from '../components/ToolCard';
@@ -43,7 +44,7 @@ export function HomePage() {
           {results.length ? (
             <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
               {results.map((t) => (
-                <ToolCard key={t.id} tool={t} showDevTag />
+                <ToolCard key={t.id} tool={t} detailed />
               ))}
             </div>
           ) : (
@@ -56,7 +57,7 @@ export function HomePage() {
           {recentTools.length > 0 && <ToolGroup title="Recent" tools={recentTools} />}
           <DeveloperToggle />
           {browseCategories(TOOLS, showDeveloper).map((c) => (
-            <ToolGroup key={c.id} id={c.id} title={c.name} subtitle={c.description} tools={browseCategoryTools(TOOLS, c.id, showDeveloper)} />
+            <ToolGroup key={c.id} id={c.id} category={c} title={c.name} subtitle={c.description} tools={browseCategoryTools(TOOLS, c.id, showDeveloper)} />
           ))}
         </>
       )}
@@ -64,16 +65,18 @@ export function HomePage() {
   );
 }
 
-function ToolGroup({ id, title, subtitle, tools }: { id?: string; title: string; subtitle?: string; tools: readonly import('@/core/types').ToolMeta[] }) {
+function ToolGroup({ id, category, title, subtitle, tools }: { id?: string; category?: Category; title: string; subtitle?: string; tools: readonly import('@/core/types').ToolMeta[] }) {
+  const Icon = category?.icon;
   return (
     <section id={id} aria-labelledby={`${title}-h`} className="flex flex-col gap-3">
       <div className="flex items-baseline gap-3">
-        <h2 id={`${title}-h`} className="text-base font-semibold">
+        <h2 id={`${title}-h`} className={category ? 'flex items-center gap-2 font-serif text-lg font-semibold' : 'text-base font-semibold'}>
+          {Icon && <Icon className="size-4" style={{ color: categoryColour(category!.id) }} aria-hidden />}
           {title}
         </h2>
         {subtitle && <span className="text-xs text-muted-foreground">{subtitle}</span>}
       </div>
-      <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
         {tools.map((t) => (
           <ToolCard key={t.id} tool={t} />
         ))}

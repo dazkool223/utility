@@ -119,6 +119,13 @@ const fake = (id: string, category: ToolMeta['category'], audience: ToolMeta['au
   load: () => Promise.reject(new Error('not loaded')),
 });
 
+describe('Category identity', () => {
+  it('every Category has its own icon and its own hue', () => {
+    expect(new Set(CATEGORIES.map((c) => c.icon)).size).toBe(CATEGORIES.length);
+    expect(new Set(CATEGORIES.map((c) => c.hue)).size).toBe(CATEGORIES.length);
+  });
+});
+
 describe('audience', () => {
   const tools = [fake('d1', 'json', 'developer'), fake('g1', 'json', 'general'), fake('d2', 'crypto', 'developer'), fake('g2', 'json', 'general')];
 
