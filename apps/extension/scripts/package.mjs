@@ -73,12 +73,12 @@ const csp =
 
 const base = {
   manifest_version: 3,
-  name: 'Utility — developer tools',
-  short_name: 'Utility',
+  name: 'Handy',
+  short_name: 'Handy',
   version: pkg.version,
   description: 'Developer tools that run entirely in your browser: JSON, Base64, JWT, hashes, UUIDs and more. Nothing leaves your device.',
   icons,
-  action: { default_popup: 'popup.html', default_title: 'Utility Quick Launcher', default_icon: icons },
+  action: { default_popup: 'popup.html', default_title: 'Handy Quick Launcher', default_icon: icons },
   permissions: ['contextMenus', 'storage'],
   commands: {
     _execute_action: { suggested_key: { default: 'Alt+Shift+U' }, description: 'Open the Quick Launcher' },
@@ -91,7 +91,7 @@ const targets = {
   firefox: {
     ...base,
     background: { scripts: ['background.js'], type: 'module' },
-    browser_specific_settings: { gecko: { id: 'utility-devtools@utility.example', strict_min_version: '128.0' } },
+    browser_specific_settings: { gecko: { id: 'dazkool.profile@gmail.com', strict_min_version: '128.0' } },
   },
 };
 
