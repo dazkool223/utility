@@ -1,7 +1,8 @@
 import { useEffect, useId, useMemo, useRef, useState, type PointerEvent as ReactPointerEvent, type ReactNode } from 'react';
 import { formatBytes, SUPPORTED_IMAGE_PIXELS } from '@/core/limits';
-import { Button, ErrorBox, FileDrop, RestrictionNotice } from '@/ui';
-import { FORMATS, type RasterFormat, type SniffedFormat } from './formats';
+import { Button, Checkbox, ErrorBox, FileDrop, RestrictionNotice, Select } from '@/ui';
+import { FORMAT_ORDER, FORMATS, type RasterFormat, type SniffedFormat } from './formats';
+import type { OutputChoice } from './output';
 import { rectFromDrag, type Rect } from './pixels';
 import { useObjectUrl, type SessionState } from './hooks';
 
@@ -192,5 +193,30 @@ export function Slider({ label, value, onChange, min = 1, max = 100, step = 1, u
       </label>
       <input id={id} type="range" min={min} max={max} step={step} value={value} onChange={(e) => onChange(e.target.valueAsNumber)} className="h-8 w-full" data-testid={testId} />
     </div>
+  );
+}
+
+/** "Save as" format, quality and (for JPEG) background controls, for use inside an OptionsBar. */
+export function OutputControls({ value, onChange }: { value: OutputChoice; onChange: (v: OutputChoice) => void }) {
+  const set = <K extends keyof OutputChoice>(key: K, v: OutputChoice[K]) => onChange({ ...value, [key]: v });
+  const lossyFormat = value.format === 'same' || FORMATS[value.format].lossy;
+  const canLossless = value.format === 'webp' || value.format === 'avif' || value.format === 'jxl';
+  return (
+    <>
+      <Select
+        label="Save as"
+        value={value.format}
+        onChange={(v) => onChange({ ...value, format: v, lossless: v === 'webp' || v === 'avif' || v === 'jxl' ? value.lossless : false })}
+        options={[{ value: 'same', label: 'Same as original' }, ...FORMAT_ORDER.map((f) => ({ value: f, label: FORMATS[f].label }))]}
+      />
+      {canLossless && <Checkbox label="Lossless" checked={value.lossless} onChange={(v) => set('lossless', v)} />}
+      {lossyFormat && !value.lossless && <Slider label="Quality" value={value.quality} onChange={(v) => set('quality', v)} testId="quality" />}
+      {(value.format === 'jpeg' || value.format === 'same') && (
+        <label className="flex flex-col gap-1.5 text-xs text-muted-foreground">
+          Background for transparency
+          <input type="color" value={value.background} onChange={(e) => set('background', e.target.value)} className="h-8 w-16 rounded border bg-background" />
+        </label>
+      )}
+    </>
   );
 }
