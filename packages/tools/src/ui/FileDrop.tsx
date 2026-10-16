@@ -90,7 +90,6 @@ export function FileDrop({ onFiles, accept, multiple, kind, label }: FileDropPro
           <Button variant="primary" onClick={() => input.current?.click()}>
             Choose {multiple ? 'files' : 'file'}
           </Button>
-          <p className="text-xs text-muted-foreground">Files stay on your device.</p>
         </>
       )}
     </div>

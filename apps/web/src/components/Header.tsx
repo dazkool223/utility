@@ -23,7 +23,6 @@ export function Header({ onOpenMenu }: { onOpenMenu: () => void }) {
           <img src="/icon.svg" alt="" className="size-6" />
           Utility
         </Link>
-        <span className="hidden text-xs text-muted-foreground sm:inline">Developer tools · 100% in your browser</span>
         <span className="flex-1" />
         <div role="radiogroup" aria-label="Theme" className="flex rounded-md border">
           {THEMES.map(({ value, label, Icon }) => (

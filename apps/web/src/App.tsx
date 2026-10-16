@@ -1,5 +1,5 @@
 import { lazy, Suspense, useEffect, useState } from 'react';
-import { Link, Route, Switch, useLocation } from 'wouter';
+import { Route, Switch, useLocation } from 'wouter';
 import { getTool, getToolByPath } from '@/core/registry';
 import { registerNavigate, TOOL_EVENTS } from '@/core/host';
 import { Header } from './components/Header';
@@ -72,7 +72,7 @@ export function App({ surface = { surface: 'website', websiteUrl: WEBSITE_URL } 
         <Header onOpenMenu={() => setMenuOpen(true)} />
         <div className="flex flex-1">
           <aside aria-label="Sidebar" className="hidden w-64 shrink-0 border-r lg:block">
-            <div className="sticky top-14 max-h-[calc(100svh-3.5rem)] overflow-y-auto">
+            <div className="sticky top-14 h-[calc(100svh-3.5rem)]">
               <Rail />
             </div>
           </aside>
@@ -89,20 +89,13 @@ export function App({ surface = { surface: 'website', websiteUrl: WEBSITE_URL } 
           </Switch>
           </Suspense>
         </main>
-        <footer className="border-t py-4 text-center text-xs text-muted-foreground">
-          Everything runs in your browser. Nothing you enter leaves your device.{' '}
-          <Link className="underline underline-offset-2" href="/privacy">
-            How we guarantee it
-          </Link>
-          {surface.surface === 'extension' && (
-            <>
-              {' · '}
-              <a className="underline underline-offset-2" href={surface.websiteUrl} target="_blank" rel="noreferrer">
-                All tools, free, on the website
-              </a>
-            </>
-          )}
-        </footer>
+        {surface.surface === 'extension' && (
+          <footer className="border-t py-4 text-center text-xs text-muted-foreground">
+            <a className="underline underline-offset-2" href={surface.websiteUrl} target="_blank" rel="noreferrer">
+              All tools, free, on the website
+            </a>
+          </footer>
+        )}
           </div>
         </div>
       </div>

@@ -9,6 +9,7 @@ import { useDeveloperTools } from '../audience';
 import { MOD } from '../platform';
 import { usePreferences } from '../theme';
 import { DeveloperToggle } from './DeveloperToggle';
+import { PrivacyChip } from './PrivacyChip';
 
 const linkClass = 'flex items-center gap-2 rounded-md px-2 py-1.5 hover:bg-accent focus-visible:bg-accent aria-[current=page]:bg-accent aria-[current=page]:font-medium';
 
@@ -25,7 +26,8 @@ export function Rail({ onNavigate, onOpenPalette }: { onNavigate?: () => void; o
   const recentTools = recent.map(getTool).filter((t) => t !== undefined);
 
   return (
-    <nav aria-label="Browse Tools" className="flex flex-col gap-5 p-4 text-sm">
+    <div className="flex h-full flex-col">
+    <nav aria-label="Browse Tools" className="flex flex-1 flex-col gap-5 overflow-y-auto p-4 text-sm">
       {onOpenPalette && (
         <Button variant="outline" className="justify-start gap-2 text-muted-foreground" onClick={onOpenPalette}>
           <Search />
@@ -73,6 +75,10 @@ export function Rail({ onNavigate, onOpenPalette }: { onNavigate?: () => void; o
         ))}
       </RailGroup>
     </nav>
+    <div className="border-t p-3">
+      <PrivacyChip />
+    </div>
+    </div>
   );
 }
 

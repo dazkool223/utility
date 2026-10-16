@@ -31,7 +31,7 @@ export default function FakeData() {
           </OptionsBar>
         }
       />
-      <p className="m-0 text-xs text-muted-foreground">Available fields: {Object.keys(FIELDS).join(', ')}. Everything is generated on your device.</p>
+      <p className="m-0 text-xs text-muted-foreground">Available fields: {Object.keys(FIELDS).join(', ')}.</p>
     </div>
   );
 }

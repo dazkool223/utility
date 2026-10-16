@@ -230,6 +230,45 @@ test.describe('Tool page', () => {
   });
 });
 
+test.describe('Privacy chip', () => {
+  test('the privacy message appears once, as the rail chip, on every kind of page', async ({ page }) => {
+    for (const path of ['/', '/category/images', '/a-z', '/pdf/merge', '/images/convert', '/privacy']) {
+      await page.goto(path);
+      await expect(page.getByTestId('privacy-chip')).toHaveCount(1);
+      await expect(page.getByTestId('privacy-chip')).toBeVisible();
+      await expect(page.getByText('Private, works offline')).toHaveCount(1);
+      if (path === '/privacy') continue;
+      await expect(page.getByText(/Nothing you enter leaves/)).toHaveCount(0);
+      await expect(page.getByText(/100% in your browser/)).toHaveCount(0);
+      await expect(page.getByText(/Everything runs in your browser/)).toHaveCount(0);
+      await expect(page.getByText(/Files stay on your device/)).toHaveCount(0);
+    }
+  });
+
+  test('the chip opens a short explanation with a link to the Privacy page, by keyboard too', async ({ page }) => {
+    await page.goto('/pdf/merge');
+    const chip = page.getByTestId('privacy-chip');
+    await chip.focus();
+    await page.keyboard.press('Enter');
+    await expect(page.getByText(/Nothing you enter leaves it/)).toBeVisible();
+    await page.keyboard.press('Escape');
+    await expect(page.getByText(/Nothing you enter leaves it/)).toHaveCount(0);
+    await chip.click();
+    await page.getByRole('link', { name: 'How we guarantee it' }).click();
+    await expect(page).toHaveURL(/\/privacy$/);
+    await expect(page.getByRole('heading', { level: 1 })).toContainText('Nothing leaves your browser');
+  });
+
+  test('the chip changes only on a real problem: offline with a Heavy Tool engine that is not cached', async ({ page, context }) => {
+    await page.goto('/pdf/ocr');
+    await expect(page.getByTestId('privacy-chip')).toHaveText('Private, works offline');
+    await context.setOffline(true);
+    await expect(page.getByTestId('privacy-chip')).toHaveText('Needs a connection');
+    await context.setOffline(false);
+    await expect(page.getByTestId('privacy-chip')).toHaveText('Private, works offline');
+  });
+});
+
 const cardIds = (page: Page) =>
   page.locator('[data-testid^=tool-card-]').evaluateAll((els) => els.map((e) => e.getAttribute('data-testid')!.replace('tool-card-', '')));
 

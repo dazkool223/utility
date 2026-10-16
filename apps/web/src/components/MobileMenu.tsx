@@ -8,7 +8,7 @@ export function MobileMenu({ open, onOpenChange, onOpenPalette }: { open: boolea
       <DialogContent className="top-0 left-0 h-svh w-[85vw] max-w-80 translate-x-0 translate-y-0 content-start gap-0 overflow-y-auto rounded-none p-0 sm:max-w-80">
         <DialogTitle className="sr-only">Menu</DialogTitle>
         <DialogDescription className="sr-only">Browse Categories, Favourites and Recent Tools.</DialogDescription>
-        <div className="pt-8">
+        <div className="h-svh pt-10">
           <Rail
             onNavigate={() => onOpenChange(false)}
             onOpenPalette={() => {

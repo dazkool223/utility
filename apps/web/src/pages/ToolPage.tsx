@@ -4,6 +4,7 @@ import { Download, ExternalLink, Star } from 'lucide-react';
 import { getTool, getToolByPath } from '@/core/registry';
 import { categoryColour, categoryName } from '@/core/categories';
 import { clearPendingInput, peekPendingInput } from '@/core/host';
+import { engineAvailableOffline, setGuaranteeProblem } from '../guarantee';
 import { recordRecent, toggleFavourite } from '@/core/preferences';
 import type { ToolMeta, ToolProps } from '@/core/types';
 import { RestrictionNotes } from '@/ui/controls';
@@ -71,6 +72,25 @@ function ToolView({ meta }: { meta: ToolMeta }) {
     };
   }, [meta]);
 
+  // A Heavy Tool whose engine is not cached yet cannot run offline: that is the one time the privacy chip changes.
+  useEffect(() => {
+    if (!meta.heavy || linkOut) return;
+    let alive = true;
+    const check = async () => {
+      const ok = navigator.onLine || (await engineAvailableOffline(meta.path));
+      if (alive) setGuaranteeProblem(ok ? null : 'You are offline, and this Tool has not downloaded its engine yet. Reconnect once to fetch it.');
+    };
+    void check();
+    window.addEventListener('online', check);
+    window.addEventListener('offline', check);
+    return () => {
+      alive = false;
+      window.removeEventListener('online', check);
+      window.removeEventListener('offline', check);
+      setGuaranteeProblem(null);
+    };
+  }, [meta, linkOut]);
+
   return (
     <ToolMetaContext.Provider value={meta}>
       <article className="flex flex-col gap-4" data-testid="tool-page" data-tool-id={meta.id}>
@@ -127,7 +147,7 @@ function ToolView({ meta }: { meta: ToolMeta }) {
         <RestrictionNotes messages={restrictions.map((r) => r.message)} />
         {linkOut ? (
           <div className="flex flex-col items-start gap-3 rounded-lg border bg-card p-6 text-sm" data-testid="heavy-link-out">
-            <p>This Tool needs a large engine, so to keep the extension light it runs on the website. It still runs entirely in your browser.</p>
+            <p>This Tool needs a large engine, so to keep the extension light it runs on the website.</p>
             <Button asChild>
               <a href={`${websiteUrl}/${meta.path}`} target="_blank" rel="noreferrer">
                 <ExternalLink />
