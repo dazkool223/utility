@@ -2,11 +2,14 @@
 @source "./";
 @source "../../web/src/";
 
-/* Quick Launcher popup: fixed size, compact editors. */
+/* Quick Launcher popup: a compact single column at a fixed size, with compact editors. */
 body.popup {
-  width: 720px;
-  height: 560px;
+  width: 560px;
+  height: 580px;
   overflow: hidden;
+}
+body.popup #root {
+  height: 100%;
 }
 body.popup .u-editor {
   height: 150px;
