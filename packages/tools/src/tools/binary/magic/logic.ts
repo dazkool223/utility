@@ -1,4 +1,5 @@
-import { gunzipSync, unzlibSync } from 'fflate';
+import { Gunzip, Unzlib } from 'fflate';
+import { MAX_DECOMPRESSED_BYTES } from '@/core/limits';
 import { ToolError } from '@/core/types';
 
 /** What we know about a value while peeling layers of encoding. */
@@ -219,7 +220,7 @@ const OPS: Op[] = [
     run: (s) => {
       if (s.bytes[0] !== 0x1f || s.bytes[1] !== 0x8b) return null;
       try {
-        return toState(gunzipSync(s.bytes));
+        return toState(inflateCapped(new Gunzip(), s.bytes));
       } catch {
         return null;
       }
@@ -230,7 +231,7 @@ const OPS: Op[] = [
     run: (s) => {
       if (s.bytes[0] !== 0x78 || ![0x01, 0x5e, 0x9c, 0xda].includes(s.bytes[1]!)) return null;
       try {
-        return toState(unzlibSync(s.bytes));
+        return toState(inflateCapped(new Unzlib(), s.bytes));
       } catch {
         return null;
       }
@@ -245,6 +246,25 @@ const OPS: Op[] = [
     },
   },
 ];
+
+/** Inflates with fflate's streaming API so a decompression bomb stops at the cap instead of filling memory. */
+function inflateCapped(stream: Gunzip | Unzlib, bytes: Uint8Array): Uint8Array {
+  const chunks: Uint8Array[] = [];
+  let total = 0;
+  stream.ondata = (chunk) => {
+    total += chunk.length;
+    if (total > MAX_DECOMPRESSED_BYTES) throw new Error('Decompressed data is too large.');
+    chunks.push(chunk);
+  };
+  stream.push(bytes, true);
+  const out = new Uint8Array(total);
+  let at = 0;
+  for (const c of chunks) {
+    out.set(c, at);
+    at += c.length;
+  }
+  return out;
+}
 
 function rate(s: State): { score: number; fileType: string | null } {
   const fileType = detectFileType(s.bytes);

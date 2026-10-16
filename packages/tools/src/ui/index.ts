@@ -25,5 +25,5 @@ export { TextTransform, type TransformMode, type TextTransformProps } from './Te
 export { GeneratorTool, type GeneratorToolProps } from './GeneratorTool';
 export { FileDrop, FileList, type FileDropProps } from './FileDrop';
 export { SendTo } from './SendTo';
-export { useWorker } from './worker';
+export { useWorker, WorkerStopped, type WorkerAccessor } from './worker';
 export { ToolMetaContext, useToolMeta } from './context';

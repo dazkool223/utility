@@ -1,4 +1,5 @@
 /** Smart Paste: recognise what pasted text or a dropped file is. Runs locally. */
+import { MAX_DETECT_CHARS } from './limits';
 
 export type TextKind =
   | 'jwt'
@@ -58,6 +59,7 @@ function base64urlDecodes(part: string): boolean {
 
 /** Returns the most likely kinds for `input`, best first. Always ends with 'text'. */
 export function detectText(raw: string): TextKind[] {
+  if (raw.length > MAX_DETECT_CHARS) return ['text']; // too big to scan on the page thread
   const s = raw.trim();
   const kinds: TextKind[] = [];
   if (!s) return ['text'];

@@ -1,11 +1,21 @@
 import { ToolError } from '@/core/types';
+import { MAX_DECOMPRESSED_BYTES, formatBytes, readStreamCapped } from '@/core/limits';
 import { base64ToBytes, bytesToBase64 } from '../base64/logic';
 
 export type CompressFormat = 'gzip' | 'deflate' | 'deflate-raw';
 
-async function run(bytes: Uint8Array, stream: CompressionStream | DecompressionStream): Promise<Uint8Array> {
+const bombError = (max: number) => new ToolError(`The decompressed data is larger than ${formatBytes(max)}, so it was stopped to protect your browser.`);
+
+async function run(bytes: Uint8Array, stream: CompressionStream | DecompressionStream, max = Infinity): Promise<Uint8Array> {
   const source = new Blob([bytes as BlobPart]).stream().pipeThrough(stream as unknown as ReadableWritablePair<Uint8Array, Uint8Array>);
-  return new Uint8Array(await new Response(source).arrayBuffer());
+  const chunks = await readStreamCapped(source, max, bombError);
+  const out = new Uint8Array(chunks.reduce((n, c) => n + c.byteLength, 0));
+  let at = 0;
+  for (const c of chunks) {
+    out.set(c, at);
+    at += c.byteLength;
+  }
+  return out;
 }
 
 export async function compressToBase64(text: string, format: CompressFormat, urlSafe = false): Promise<string> {
@@ -27,8 +37,9 @@ export async function decompressFromBase64(input: string, format: CompressFormat
   const fmt = format === 'auto' ? detect(bytes) : format;
   let out: Uint8Array;
   try {
-    out = await run(bytes, new DecompressionStream(fmt));
-  } catch {
+    out = await run(bytes, new DecompressionStream(fmt), MAX_DECOMPRESSED_BYTES);
+  } catch (e) {
+    if (e instanceof ToolError) throw e;
     throw new ToolError(`These bytes are not valid ${fmt} data. Check the format, or try "Detect automatically".`);
   }
   try {

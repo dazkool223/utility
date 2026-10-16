@@ -105,3 +105,33 @@ test('Magic decoder: peels Base64 off a sentence', async ({ page }) => {
   await content.fill('SGVsbG8sIHRoaXMgaXMgYSBwZXJmZWN0bHkgbm9ybWFsIHNlbnRlbmNlIHRoYXQgd2FzIGVuY29kZWQgd2l0aCBCYXNlNjQu');
   await expect(output(page)).toContainText('perfectly normal sentence');
 });
+
+test('SQLite browser: a runaway query can be stopped and the Tool keeps working', async ({ page, browserName }) => {
+  // Stopping starts a second worker. The Vite preview server answers that revalidation with a bare 304 that has no
+  // Cross-Origin-Resource-Policy header, so WebKit refuses it. Production serves /assets/* as immutable and never revalidates.
+  test.skip(browserName === 'webkit', 'preview server omits CORP on 304 responses');
+  await page.goto('/office/sqlite');
+  await page.getByTestId('file-input').setInputFiles('e2e/fixtures/office-sample.sqlite');
+  await expect(page.getByTestId('schema-list')).toBeVisible({ timeout: 30_000 });
+  const editor = page.getByTestId('tool-input').locator('.cm-content');
+  await editor.click();
+  await page.keyboard.press('ControlOrMeta+a');
+  await page.keyboard.insertText('WITH RECURSIVE c(x) AS (SELECT 1 UNION ALL SELECT x+1 FROM c) SELECT count(*) FROM c;');
+  await page.getByTestId('run').click();
+  await page.getByTestId('stop').click();
+  await expect(page.getByText(/The query was stopped and the database was reloaded/)).toBeVisible({ timeout: 30_000 });
+  // The database was reopened, so ordinary queries work again.
+  await expect(page.getByTestId('schema-list')).toBeVisible();
+  await page.getByTestId('schema-list').getByRole('button').first().click();
+  await expect(page.getByText(/The query was stopped/)).toBeHidden();
+});
+
+test('Calculator: an expression that would use gigabytes of memory is refused, not run', async ({ page }) => {
+  await page.goto('/numbers/math');
+  const content = page.getByTestId('tool-input').locator('.cm-content');
+  await content.click();
+  await content.fill('zeros(20000, 20000)');
+  await expect(page.getByText(/too large for the calculator/)).toBeVisible({ timeout: 20_000 });
+  await content.fill('2 + 2');
+  await expect(output(page)).toContainText('4');
+});

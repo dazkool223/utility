@@ -4,7 +4,7 @@ import { NumberInput, OptionsBar, Select, TextTransform, useWorker, type Transfo
 import type { NumberKind } from './logic';
 
 export default function MathTool({ initialInput }: ToolProps) {
-  const api = useWorker<typeof import('./worker').api>(() => new Worker(new URL('./worker.ts', import.meta.url), { type: 'module' }));
+  const api = useWorker<typeof import('./worker').api>(() => new Worker(new URL('./worker.ts', import.meta.url), { type: 'module' }), { timeoutMs: 10_000 });
   const [kind, setKind] = useState<NumberKind>('number');
   const [precision, setPrecision] = useState(14);
   const modes = useMemo<TransformMode[]>(() => [{ id: 'eval', label: 'Evaluate', run: (s) => api().evaluate(s, kind, precision), filename: 'results.txt' }], [api, kind, precision]);

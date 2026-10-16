@@ -65,3 +65,18 @@ describe('errors and safety', () => {
     await expect(evaluateLines('process.exit()')).rejects.toThrow();
   });
 });
+
+describe('size guards', () => {
+  it.each(['zeros(20000, 20000)', 'ones([5000, 5000])', 'identity(5000)', 'range(1, 100000000)', '1:100000000', '[1:100000000]', 'sum(range("1:100000000"))', 'resize([1], [20000, 20000])', 'kron(zeros(1000, 1000), zeros(1000, 1000))', 'outer(range(1, 900000), range(1, 900000))', 'randomInt(0, 9, [20000, 20000])'])(
+    'refuses %s instead of running out of memory',
+    async (expr) => {
+      await expect(evaluateLines(expr)).rejects.toThrow(/too large for the calculator/);
+    },
+  );
+  it('still allows reasonable sizes', async () => {
+    expect(await one('sum(1:1000)')).toBe('499500');
+    expect(await one('size(zeros(100, 100))')).toBe('[100, 100]');
+    expect(await one('size(identity(50))')).toBe('[50, 50]');
+    expect(await one('sum(range(0, 10, 2))')).toBe('20');
+  });
+});

@@ -5,6 +5,7 @@ import { detectFile, detectText, type DetectKind } from '@/core/detect';
 import { TOOLS, toolsForKinds } from '@/core/registry';
 import { searchToolsWithMatch } from '@/core/search';
 import { setPendingInput } from '@/core/host';
+import { MAX_DETECT_CHARS } from '@/core/limits';
 import type { ToolMeta } from '@/core/types';
 import { cn } from '@/ui/lib/utils';
 import { Button } from '@/ui/shadcn/button';
@@ -50,6 +51,11 @@ export function Bench({ text, onTextChange }: { text: string; onTextChange: (tex
       return;
     }
     const t = setTimeout(() => {
+      // A huge paste is not scanned (that would freeze the page); it is offered to the text Tools as plain text.
+      if (text.length > MAX_DETECT_CHARS) {
+        setDetected({ label: 'a large piece of text', tools: toolsForKinds(['text']).slice(0, 6), text });
+        return;
+      }
       const kinds = query.length >= 6 ? detectText(text).filter((k) => k !== 'text' && k !== 'markdown') : [];
       if (kinds.length) setDetected({ label: KIND_LABEL[kinds[0]!] ?? kinds[0]!, tools: toolsForKinds(kinds).slice(0, 6), text });
       else if (!isSearchQuery(query) && query.length >= 40) setDetected({ label: 'plain text', tools: toolsForKinds(['text']).slice(0, 6), text });

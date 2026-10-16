@@ -50,3 +50,12 @@ describe('gzip file', () => {
     expect(outputName('weird', 'decompress')).toBe('weird.out');
   });
 });
+
+describe('decompression bombs', () => {
+  it('stops decompressing past the output cap', async () => {
+    const gz = await gzipBlob(new Blob([new Uint8Array(4 * 1024 * 1024)]));
+    expect(gz.size).toBeLessThan(10_000);
+    await expect(gunzipBlob(gz, 1024 * 1024)).rejects.toThrow(/larger than 1\.0 MB/);
+    expect((await gunzipBlob(gz)).size).toBe(4 * 1024 * 1024);
+  });
+});

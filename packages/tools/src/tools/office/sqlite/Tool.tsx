@@ -1,8 +1,11 @@
 import { useCallback, useEffect, useState } from 'react';
 import type { ToolProps } from '@/core/types';
 import { formatBytes } from '@/core/limits';
-import { BusyLine, Button, CodeEditor, CopyButton, ErrorBox, FileDrop, FileList, PaneTitle, downloadBlob, useRunShortcut, useWorker } from '@/ui';
+import { BusyLine, Button, CodeEditor, CopyButton, ErrorBox, FileDrop, FileList, PaneTitle, WorkerStopped, downloadBlob, useRunShortcut, useWorker } from '@/ui';
 import { ROW_LIMIT, describeCell, selectAllSql, type QueryResult, type SchemaObject } from './logic';
+
+/** A query that runs longer than this is stopped; a runaway query would otherwise lock the Tool for good. */
+const QUERY_TIMEOUT_MS = 30_000;
 
 function messageOf(e: unknown, fallback: string): string {
   // Errors thrown in the worker lose their class but keep their name.
@@ -15,7 +18,7 @@ function toCsvText(result: QueryResult): string {
 }
 
 export default function SqliteBrowser({ initialFiles }: ToolProps) {
-  const api = useWorker<typeof import('./worker').api>(() => new Worker(new URL('./worker.ts', import.meta.url), { type: 'module' }));
+  const api = useWorker<typeof import('./worker').api>(() => new Worker(new URL('./worker.ts', import.meta.url), { type: 'module' }), { timeoutMs: QUERY_TIMEOUT_MS });
   const [file, setFile] = useState<File | null>(initialFiles?.[0] ?? null);
   const [schema, setSchema] = useState<SchemaObject[] | null>(null);
   const [sql, setSql] = useState('');
@@ -24,6 +27,8 @@ export default function SqliteBrowser({ initialFiles }: ToolProps) {
   const [busy, setBusy] = useState(false);
   const [modified, setModified] = useState(false);
   const [selected, setSelected] = useState<string | null>(null);
+  const [reopen, setReopen] = useState(0);
+  const [stopNote, setStopNote] = useState<string | null>(null);
 
   const execute = useCallback(
     async (text: string) => {
@@ -38,7 +43,13 @@ export default function SqliteBrowser({ initialFiles }: ToolProps) {
         }
       } catch (e) {
         setResult(null);
-        setError(messageOf(e, 'The query could not be run.'));
+        if (e instanceof WorkerStopped) {
+          // The worker (and the open database) is gone: load the file again so the Tool is usable.
+          setStopNote(`${e.message.replace(/\.$/, '')}. The query was stopped and the database was reloaded, so any changes made in this session were discarded.`);
+          setReopen((n) => n + 1);
+        } else {
+          setError(messageOf(e, 'The query could not be run.'));
+        }
       } finally {
         setBusy(false);
       }
@@ -75,9 +86,12 @@ export default function SqliteBrowser({ initialFiles }: ToolProps) {
     return () => {
       cancelled = true;
     };
-  }, [file, api, execute]);
+  }, [file, api, execute, reopen]);
 
-  const run = useCallback(() => void execute(sql), [execute, sql]);
+  const run = useCallback(() => {
+    setStopNote(null);
+    void execute(sql);
+  }, [execute, sql]);
   useRunShortcut(run);
 
   const current = schema?.find((s) => s.name === selected) ?? null;
@@ -107,6 +121,7 @@ export default function SqliteBrowser({ initialFiles }: ToolProps) {
                           setSelected(o.name);
                           const text = selectAllSql(o.name);
                           setSql(text);
+                          setStopNote(null);
                           void execute(text);
                         }}
                       >
@@ -148,6 +163,11 @@ export default function SqliteBrowser({ initialFiles }: ToolProps) {
                         Download modified database
                       </Button>
                     )}
+                    {busy && (
+                      <Button onClick={() => api.restart()} testId="stop">
+                        Stop
+                      </Button>
+                    )}
                     <Button variant="primary" onClick={run} disabled={busy} testId="run">
                       {busy ? 'Running…' : 'Run (Ctrl+Enter)'}
                     </Button>
@@ -155,7 +175,7 @@ export default function SqliteBrowser({ initialFiles }: ToolProps) {
                   <BusyLine busy={busy} label="Running query…" />
                   <CodeEditor value={sql} onChange={setSql} language="sql" label="SQL query" testId="tool-input" className="min-h-28" placeholder="SELECT * FROM my_table LIMIT 100;" />
                 </section>
-                <ErrorBox error={error} />
+                <ErrorBox error={error ?? stopNote} />
                 <section className="flex min-w-0 flex-col gap-2">
                   <div className="flex min-h-8 items-center gap-2">
                     <PaneTitle>Result</PaneTitle>

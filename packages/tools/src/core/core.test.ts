@@ -214,3 +214,12 @@ describe('sizeRestriction', () => {
     expect(sizeRestriction('none', 1e12)).toBeNull();
   });
 });
+
+describe('detectText size cap', () => {
+  it('does not scan huge text', async () => {
+    const { detectText } = await import('./detect');
+    const { MAX_DETECT_CHARS } = await import('./limits');
+    expect(detectText('{"a":"' + 'x'.repeat(MAX_DETECT_CHARS) + '"}')).toEqual(['text']);
+    expect(detectText('{"a":1}')).toContain('json');
+  });
+});
