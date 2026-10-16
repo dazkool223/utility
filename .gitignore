@@ -10,3 +10,4 @@ dist*
 .claude
 .github
 docs/issues/
+apps/web/public/engines/background-remover/

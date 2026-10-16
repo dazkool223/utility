@@ -101,6 +101,8 @@ These are approved but held until the licence audit. Each needs a copyleft engin
 | PDF Compress (P0) | mupdf.js | AGPL-3.0 | Not shipped. A licence-clean fallback exists: re-render pages as images (pdf.js + pdf-lib), which loses selectable text. Ship it only if you approve it. |
 | Image Compressor: PNG palette-reduction mode (P0) | libimagequant | GPL-3.0 (verify) | The Compressor ships with MozJPEG, WebP, AVIF and lossless oxipng. Only the palette-reduction mode is held. |
 
+**Background Remover (P2) is built on an AGPL-3.0 engine and is NOT held.** It uses @imgly/background-removal with its full-precision IS-Net model, chosen explicitly. Shipping it means the app is distributed under AGPL-3.0 (or the Tool must be removed), so the project-licence decision in §9 now applies to it. The library is patched (`patches/`) to load ONNX Runtime from plain same-origin URLs and to avoid `new Function`, so the Content-Security-Policy stays unchanged. The engine files are downloaded from imgly's release host at build time by `apps/web/scripts/fetch-bg-engine.mjs` (checksum-verified, git-ignored) and served from our own origin.
+
 Approved and **not** held:
 - **PGP (openpgp.js, LGPL-3.0).** LGPL allows use from a permissive project if the library is loaded as a separate, unmodified, replaceable file and its notice is shipped. That is how we'll load it.
 - **Audio convert / trim, Video → GIF (ffmpeg.wasm).** Use an LGPL-only ffmpeg core (no x264/GPL components) loaded as a separate file. MP3 encoding uses LAME (LGPL) the same way.
@@ -349,7 +351,7 @@ Markers: **H** = Heavy Tool (Website only; the Extension links out) · **⚠** =
 - [ ] P2 Image compare / diff
 - [ ] P2 GIF maker / frame extractor ⚠
 - [ ] P2 OCR (image → text) **H**
-- [ ] P2 Background removal **H** ©
+- [x] P2 Background removal **H** © — built with @imgly/background-removal (AGPL-3.0, patched; see §8)
 - [ ] P2 Screenshot beautifier / device mockup
 
 ### 10.12 PDF

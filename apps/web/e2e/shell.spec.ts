@@ -146,9 +146,9 @@ test.describe('Category identity', () => {
 });
 
 test.describe('Home bench', () => {
-  test('opens with a greeting and the search field focused', async ({ page }) => {
+  test('opens with the search field focused and no greeting', async ({ page }) => {
     await page.goto('/');
-    await expect(page.getByRole('heading', { level: 1 })).toContainText('Hello');
+    await expect(page.getByRole('heading', { level: 1 })).toHaveText('Find a Tool');
     await expect(page.getByTestId('home-search')).toBeFocused();
   });
 
@@ -181,7 +181,7 @@ test.describe('Home bench', () => {
 
   test('pasting anywhere on the page runs Smart Paste without focusing the bar first', async ({ page }) => {
     await page.goto('/');
-    await page.getByRole('heading', { level: 1 }).click();
+    await page.getByTestId('home-search').blur();
     await expect(page.getByTestId('home-search')).not.toBeFocused();
     await page.evaluate((text) => {
       const data = new DataTransfer();
@@ -298,7 +298,7 @@ test.describe('Quality pass', () => {
     await page.reload(); // from here on the page is controlled by the service worker
     await context.setOffline(true);
     await page.reload();
-    await expect(page.getByRole('heading', { level: 1 })).toContainText('Hello');
+    await expect(page.getByRole('heading', { level: 1 })).toHaveText('Find a Tool');
     const faces = await page.evaluate(async () => {
       const loaded = await Promise.all([document.fonts.load('16px "Figtree Variable"'), document.fonts.load('600 24px "Fraunces Variable"'), document.fonts.load('14px "JetBrains Mono Variable"')]);
       return loaded.map((l) => l.length);

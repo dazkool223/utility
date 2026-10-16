@@ -1,0 +1,142 @@
+diff --git a/dist/index.cjs b/dist/index.cjs
+index 74683dfccb3130e1f6430709f7a74ddbc8537620..f64386b36888df55aa95a1f1190ce3214f56198e 100644
+--- a/dist/index.cjs
++++ b/dist/index.cjs
+@@ -717,7 +717,28 @@ memoize.Cache = MapCache_default;
+ var memoize_default = memoize;
+ 
+ // src/utils.ts
+-var import_ndarray2 = __toESM(require_ndarray());
++// Patched: the bundled `ndarray` builds its accessors with `new Function`, which our Content-Security-Policy forbids
++// (no 'unsafe-eval'). This library only needs a typed array plus its shape, get() and set(), so this stands in for it.
++function ndarrayLite(data, shape) {
++  const stride = new Array(shape.length);
++  for (let i = shape.length - 1, s = 1; i >= 0; i--) {
++    stride[i] = s;
++    s *= shape[i];
++  }
++  const offset = (idx) => idx.reduce((n, v, i) => n + v * stride[i], 0);
++  return {
++    data,
++    shape,
++    stride,
++    get: (...idx) => data[offset(idx)],
++    set: (...args) => {
++      const value = args.pop();
++      data[offset(args)] = value;
++      return value;
++    }
++  };
++}
++var import_ndarray2 = { default: ndarrayLite };
+ 
+ // src/MimeType.ts
+ var MimeType = class _MimeType {
+@@ -756,7 +777,7 @@ var MimeType = class _MimeType {
+ };
+ 
+ // src/codecs.ts
+-var import_ndarray = __toESM(require_ndarray());
++var import_ndarray = { default: ndarrayLite };
+ async function imageDecode(blob) {
+   const mime = MimeType.fromString(blob.type);
+   switch (mime.type) {
+@@ -949,7 +970,7 @@ function createCanvas(width, height) {
+ }
+ 
+ // src/onnx.ts
+-var import_ndarray3 = __toESM(require_ndarray());
++var import_ndarray3 = { default: ndarrayLite };
+ 
+ // src/capabilities.js
+ var webgpu = async () => {
+@@ -962,6 +983,9 @@ var maxNumThreads = () => navigator.hardwareConcurrency ?? 4;
+ 
+ // src/resource.ts
+ async function loadAsUrl(url, config) {
++  // Patched: ONNX Runtime files are served whole from publicPath, so they load from a plain same-origin URL.
++  // A blob: URL would need script-src/connect-src to allow blob:, which our Content-Security-Policy does not.
++  if (config.publicPath && url.startsWith("/onnxruntime-web/")) return new URL(url.slice(1), config.publicPath).toString();
+   return URL.createObjectURL(await loadAsBlob(url, config));
+ }
+ async function loadAsBlob(key, config) {
+@@ -5295,7 +5319,7 @@ function validateConfig(configuration) {
+ }
+ 
+ // src/inference.ts
+-var import_ndarray4 = __toESM(require_ndarray());
++var import_ndarray4 = { default: ndarrayLite };
+ async function initBase(config) {
+   if (config.debug)
+     console.debug("Loading model...", config.model);
+diff --git a/dist/index.mjs b/dist/index.mjs
+index 0ea9fb5118c12e92fe3168a28aa8f494e6a18eb5..63e8066538ce999349da2125ca811d004745240d 100644
+--- a/dist/index.mjs
++++ b/dist/index.mjs
+@@ -700,7 +700,28 @@ memoize.Cache = MapCache_default;
+ var memoize_default = memoize;
+ 
+ // src/utils.ts
+-var import_ndarray2 = __toESM(require_ndarray());
++// Patched: the bundled `ndarray` builds its accessors with `new Function`, which our Content-Security-Policy forbids
++// (no 'unsafe-eval'). This library only needs a typed array plus its shape, get() and set(), so this stands in for it.
++function ndarrayLite(data, shape) {
++  const stride = new Array(shape.length);
++  for (let i = shape.length - 1, s = 1; i >= 0; i--) {
++    stride[i] = s;
++    s *= shape[i];
++  }
++  const offset = (idx) => idx.reduce((n, v, i) => n + v * stride[i], 0);
++  return {
++    data,
++    shape,
++    stride,
++    get: (...idx) => data[offset(idx)],
++    set: (...args) => {
++      const value = args.pop();
++      data[offset(args)] = value;
++      return value;
++    }
++  };
++}
++var import_ndarray2 = { default: ndarrayLite };
+ 
+ // src/MimeType.ts
+ var MimeType = class _MimeType {
+@@ -739,7 +760,7 @@ var MimeType = class _MimeType {
+ };
+ 
+ // src/codecs.ts
+-var import_ndarray = __toESM(require_ndarray());
++var import_ndarray = { default: ndarrayLite };
+ async function imageDecode(blob) {
+   const mime = MimeType.fromString(blob.type);
+   switch (mime.type) {
+@@ -932,7 +953,7 @@ function createCanvas(width, height) {
+ }
+ 
+ // src/onnx.ts
+-var import_ndarray3 = __toESM(require_ndarray());
++var import_ndarray3 = { default: ndarrayLite };
+ 
+ // src/capabilities.js
+ var webgpu = async () => {
+@@ -945,6 +966,9 @@ var maxNumThreads = () => navigator.hardwareConcurrency ?? 4;
+ 
+ // src/resource.ts
+ async function loadAsUrl(url, config) {
++  // Patched: ONNX Runtime files are served whole from publicPath, so they load from a plain same-origin URL.
++  // A blob: URL would need script-src/connect-src to allow blob:, which our Content-Security-Policy does not.
++  if (config.publicPath && url.startsWith("/onnxruntime-web/")) return new URL(url.slice(1), config.publicPath).toString();
+   return URL.createObjectURL(await loadAsBlob(url, config));
+ }
+ async function loadAsBlob(key, config) {
+@@ -5278,7 +5302,7 @@ function validateConfig(configuration) {
+ }
+ 
+ // src/inference.ts
+-var import_ndarray4 = __toESM(require_ndarray());
++var import_ndarray4 = { default: ndarrayLite };
+ async function initBase(config) {
+   if (config.debug)
+     console.debug("Loading model...", config.model);

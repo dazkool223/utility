@@ -9,7 +9,7 @@ export default defineTool({
   audience: 'general',
   priority: 'P1',
   aliases: ['crop image', 'rotate image', 'flip image', 'mirror image', 'cut image', 'trim image', 'crop photo', 'aspect ratio crop'],
-  related: ['image-resize', 'image-compress', 'image-annotate'],
+  related: ['image-resize', 'image-compress', 'image-annotate', 'image-background-remover'],
   inputKind: 'image',
   accepts: ['image'],
   restrictions: [{ message: 'Metadata (EXIF, GPS, colour profiles) is not kept in the saved file. Cropping and turning are exact and lose no quality in PNG; lossy formats are re-encoded.' }],

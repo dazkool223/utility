@@ -1,4 +1,4 @@
-import { defineConfig } from 'vite';
+import { defineConfig, type Plugin } from 'vite';
 import react from '@vitejs/plugin-react';
 import tailwindcss from '@tailwindcss/vite';
 import { VitePWA } from 'vite-plugin-pwa';
@@ -20,6 +20,15 @@ const devHeaders = {
   ),
 };
 
+// onnxruntime-web references its own .wasm files by URL, so Vite would emit a ~23 MB copy. The Background Remover
+// never fetches it: it points ONNX Runtime at the self-hosted files under /engines/background-remover/ instead.
+const dropBundledOrtWasm: Plugin = {
+  name: 'drop-bundled-ort-wasm',
+  generateBundle(_, bundle) {
+    for (const name of Object.keys(bundle)) if (/(^|\/)ort-wasm[^/]*\.wasm$/.test(name)) delete bundle[name];
+  },
+};
+
 export default defineConfig({
   resolve: {
     alias: { '@': fileURLToPath(new URL('../../packages/tools/src', import.meta.url)) },
@@ -27,6 +36,7 @@ export default defineConfig({
   plugins: [
     react(),
     tailwindcss(),
+    dropBundledOrtWasm,
     VitePWA({
       registerType: 'autoUpdate',
       injectRegister: 'script-defer',

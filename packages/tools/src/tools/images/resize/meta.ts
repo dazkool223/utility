@@ -9,7 +9,7 @@ export default defineTool({
   audience: 'general',
   priority: 'P0',
   aliases: ['resize image', 'scale image', 'change image size', 'shrink image', 'enlarge image', 'image dimensions', 'thumbnail'],
-  related: ['image-convert', 'image-compress', 'image-crop-rotate'],
+  related: ['image-convert', 'image-compress', 'image-crop-rotate', 'image-background-remover'],
   inputKind: 'image',
   accepts: ['image'],
   restrictions: [{ message: 'Metadata (EXIF, GPS, colour profiles) is not kept in the resized file. Enlarging cannot add detail that is not in the original.' }],

@@ -19,7 +19,7 @@ export function HomePage() {
   return (
     <div className="flex flex-col gap-8">
       <section className="flex flex-col gap-4 pt-4">
-        <h1 className="font-serif text-2xl font-semibold tracking-tight sm:text-3xl">Hello. What are we working on today?</h1>
+        <h1 className="sr-only">Find a Tool</h1>
         <Bench text={text} onTextChange={setText} />
       </section>
 

@@ -2,4 +2,7 @@ packages:
   - packages/*
   - apps/*
 allowBuilds:
+  protobufjs: false
   tesseract.js: false
+patchedDependencies:
+  '@imgly/background-removal': patches/@imgly__background-removal.patch

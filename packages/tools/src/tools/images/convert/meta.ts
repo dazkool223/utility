@@ -9,7 +9,7 @@ export default defineTool({
   audience: 'general',
   priority: 'P0',
   aliases: ['png to jpg', 'jpg to png', 'webp converter', 'avif converter', 'jxl', 'jpeg xl', 'qoi', 'image converter', 'convert image', 'png to webp', 'heic'],
-  related: ['base64-file', 'image-compress', 'image-resize'],
+  related: ['base64-file', 'image-compress', 'image-resize', 'image-background-remover'],
   heavy: true,
   inputKind: 'image',
   accepts: ['image'],
