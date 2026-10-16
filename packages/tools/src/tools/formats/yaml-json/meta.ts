@@ -6,6 +6,7 @@ export default defineTool({
   name: 'JSON ↔ YAML',
   description: 'Convert JSON to YAML and YAML to JSON, including multi-document YAML',
   category: 'formats',
+  audience: 'developer',
   priority: 'P0',
   aliases: ['yaml to json', 'json to yaml', 'yml'],
   related: ['json-format', 'toml-yaml', 'yaml-validate', 'yaml-format'],

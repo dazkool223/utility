@@ -6,6 +6,7 @@ export default defineTool({
   name: 'JSON Repair',
   description: 'Fix broken JSON: single quotes, trailing commas, comments, unquoted keys and truncated data',
   category: 'json',
+  audience: 'developer',
   priority: 'P2',
   aliases: ['fix json', 'json fixer', 'broken json'],
   related: ['json-validate', 'json-format'],

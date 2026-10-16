@@ -6,6 +6,7 @@ export default defineTool({
   name: 'CSV ↔ XLSX',
   description: 'Turn a CSV file into an Excel workbook, or export a sheet of an .xlsx file to CSV',
   category: 'office',
+  audience: 'general',
   priority: 'P2',
   aliases: ['csv to excel', 'excel to csv', 'xlsx to csv', 'csv to xlsx', 'spreadsheet', 'xls'],
   related: ['json-csv'],

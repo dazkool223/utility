@@ -6,6 +6,7 @@ export default defineTool({
   name: 'Gzip / Gunzip File',
   description: 'Compress a file to .gz or decompress a .gz file, streamed in your browser',
   category: 'archives',
+  audience: 'general',
   priority: 'P1',
   aliases: ['gzip', 'gunzip', '.gz', 'compress file', 'decompress file', 'ungzip'],
   related: ['gzip-text'],

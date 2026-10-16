@@ -6,6 +6,7 @@ export default defineTool({
   name: 'Pipeline',
   description: 'Chain Tools together, e.g. Base64 decode → gunzip → JSON format, and see every intermediate result',
   category: 'binary',
+  audience: 'developer',
   priority: 'P1',
   aliases: ['recipe', 'chain', 'cyberchef', 'workflow'],
   inputKind: 'text',

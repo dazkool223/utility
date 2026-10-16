@@ -6,6 +6,7 @@ export default defineTool({
   name: 'JSON Minifier',
   description: 'Remove all whitespace from JSON to make it as small as possible',
   category: 'json',
+  audience: 'developer',
   priority: 'P0',
   aliases: ['compact json', 'compress json', 'json one line'],
   related: ['json-format', 'json-validate', 'json-escape'],

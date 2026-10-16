@@ -6,6 +6,7 @@ export default defineTool({
   name: 'Base64 Encode / Decode',
   description: 'Encode text to Base64 or decode it back, including URL-safe Base64',
   category: 'encoders',
+  audience: 'developer',
   priority: 'P0',
   aliases: ['b64', 'atob', 'btoa'],
   related: ['json-format', 'base64-file', 'url-encode', 'jwt-decode', 'text-hex', 'gzip-text'],

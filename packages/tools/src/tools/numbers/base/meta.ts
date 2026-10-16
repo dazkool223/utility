@@ -6,6 +6,7 @@ export default defineTool({
   name: 'Number Base Converter',
   description: 'Convert whole numbers of any size between binary, octal, decimal, hex and any base up to 62',
   category: 'numbers',
+  audience: 'general',
   priority: 'P0',
   aliases: ['binary to decimal', 'hex to decimal', 'decimal to hex', 'decimal to binary', 'bin2dec', 'hex2dec', 'radix', 'base36', 'base62'],
   related: ['bitwise-calc', 'ip-format', 'unit-converter'],

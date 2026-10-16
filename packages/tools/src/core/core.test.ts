@@ -3,7 +3,9 @@ import { detectFile, detectText } from './detect';
 import { searchTools } from './search';
 import { TOOLS, getTool, getToolByPath, toolsForKinds } from './registry';
 import { CATEGORIES } from './categories';
-import { clearPreferences, getPreferences, recordRecent, toggleFavourite } from './preferences';
+import { clearPreferences, getPreferences, recordRecent, setDeveloperTools, showsDeveloperTools, toggleFavourite } from './preferences';
+import { browseCategories, browseCategoryTools, browseTools } from './audience';
+import type { ToolMeta } from './types';
 import { sizeRestriction } from './limits';
 
 describe('registry invariants (every Tool)', () => {
@@ -13,6 +15,7 @@ describe('registry invariants (every Tool)', () => {
     expect(tool.id).toMatch(/^[a-z0-9]+(-[a-z0-9]+)*$/);
     expect(tool.path).toMatch(/^[a-z0-9-]+\/[a-z0-9-]+$/);
     expect(CATEGORIES.some((c) => c.id === tool.category)).toBe(true);
+    expect(['general', 'developer'], 'every Tool must declare an audience').toContain(tool.audience);
     expect(tool.name.length).toBeGreaterThan(2);
     expect(tool.description.length).toBeGreaterThan(10);
     for (const r of tool.related ?? []) expect(getTool(r), `related id "${r}" must exist`).toBeDefined();
@@ -104,6 +107,50 @@ describe('searchTools', () => {
   });
 });
 
+const fake = (id: string, category: ToolMeta['category'], audience: ToolMeta['audience']): ToolMeta => ({
+  id,
+  path: `${category}/${id}`,
+  name: `Widget ${id}`,
+  description: 'A pretend Tool for tests',
+  category,
+  audience,
+  priority: 'P1',
+  inputKind: 'none',
+  load: () => Promise.reject(new Error('not loaded')),
+});
+
+describe('audience', () => {
+  const tools = [fake('d1', 'json', 'developer'), fake('g1', 'json', 'general'), fake('d2', 'crypto', 'developer'), fake('g2', 'json', 'general')];
+
+  it('browsing with the switch off shows general Tools only', () => {
+    expect(browseTools(tools, false).map((t) => t.id)).toEqual(['g1', 'g2']);
+  });
+  it('browsing with the switch on lists general Tools before developer Tools', () => {
+    expect(browseCategoryTools(tools, 'json', true).map((t) => t.id)).toEqual(['g1', 'g2', 'd1']);
+  });
+  it('hides Categories left with no general Tool, and shows them when the switch is on', () => {
+    expect(browseCategories(tools, false).map((c) => c.id)).toEqual(['json']);
+    expect(browseCategories(tools, true).map((c) => c.id)).toEqual(['json', 'crypto']);
+  });
+  it('search ignores the switch and ranks general before developer on equal relevance', () => {
+    const ids = searchTools('widget', tools).map((t) => t.id);
+    expect(ids).toHaveLength(4);
+    expect(ids.slice(0, 2).sort()).toEqual(['g1', 'g2']);
+    expect(ids.slice(2).sort()).toEqual(['d1', 'd2']);
+  });
+  it('search still finds developer Tools in the real catalogue', () => {
+    const jwt = searchTools('jwt', TOOLS).find((t) => t.id === 'jwt-decode');
+    expect(jwt?.audience).toBe('developer');
+  });
+  it('Smart Paste still suggests developer Tools', () => {
+    expect(toolsForKinds(['jwt']).some((t) => t.audience === 'developer')).toBe(true);
+  });
+  it('the real catalogue has a fully developer Category that disappears while the switch is off', () => {
+    expect(browseCategories(TOOLS, false).map((c) => c.id)).not.toContain('formats');
+    expect(browseCategories(TOOLS, true).map((c) => c.id)).toContain('formats');
+  });
+});
+
 describe('toolsForKinds', () => {
   it('maps detections to Tools', () => {
     expect(toolsForKinds(['json', 'text']).map((t) => t.id)).toContain('json-format');
@@ -125,6 +172,14 @@ describe('preferences', () => {
   });
   it('defaults to the dark theme for a new visitor', () => {
     expect(getPreferences().theme).toBe('dark');
+  });
+  it('stores the Developer tools switch as a Preference; a stored choice wins over the Surface default', () => {
+    expect(showsDeveloperTools(getPreferences(), false)).toBe(false);
+    expect(showsDeveloperTools(getPreferences(), true)).toBe(true);
+    setDeveloperTools(false);
+    expect(showsDeveloperTools(getPreferences(), true)).toBe(false);
+    setDeveloperTools(true);
+    expect(JSON.parse(globalThis.localStorage.getItem('utility:preferences:v1')!).developerTools).toBe(true);
   });
   it('toggles favourites and keeps recents unique, newest first, capped', () => {
     toggleFavourite('a');

@@ -6,6 +6,7 @@ export default defineTool({
   name: 'Password Protect PDF',
   description: 'Lock a PDF with a password using AES-256 encryption, and choose what readers may do',
   category: 'pdf',
+  audience: 'general',
   priority: 'P0',
   aliases: ['encrypt pdf', 'lock pdf', 'pdf password', 'secure pdf', 'aes pdf'],
   related: ['pdf-unlock', 'pdf-merge'],

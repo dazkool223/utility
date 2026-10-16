@@ -6,6 +6,7 @@ export default defineTool({
   name: 'cURL to Code',
   description: 'Turn a curl command into JavaScript fetch, Python requests or a clean shell command',
   category: 'web',
+  audience: 'developer',
   priority: 'P2',
   aliases: ['curl to fetch', 'curl to python', 'curl converter', 'curl to javascript', 'curl to requests', 'devtools copy as curl'],
   related: ['url-parse', 'url-encode', 'user-agent-parse', 'json-format'],

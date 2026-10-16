@@ -6,6 +6,7 @@ export default defineTool({
   name: 'Rotate PDF Pages',
   description: 'Turn all pages, or only the pages you pick, by 90, 180 or 270 degrees',
   category: 'pdf',
+  audience: 'general',
   priority: 'P0',
   aliases: ['rotate pdf', 'turn pdf', 'flip pdf pages', 'landscape to portrait'],
   related: ['pdf-organise', 'pdf-split', 'pdf-merge'],

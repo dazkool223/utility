@@ -6,6 +6,7 @@ export default defineTool({
   name: 'Hash Generator',
   description: 'MD5, SHA-1/2/3, Keccak, BLAKE2/3, RIPEMD-160 and xxHash of any text, all at once',
   category: 'crypto',
+  audience: 'developer',
   priority: 'P0',
   aliases: ['md5', 'sha1', 'sha256', 'sha512', 'sha3', 'blake3', 'checksum', 'digest', 'crc32'],
   related: ['hmac-generate', 'file-checksum', 'hash-identify', 'bcrypt-hash'],

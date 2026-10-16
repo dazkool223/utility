@@ -6,6 +6,7 @@ export default defineTool({
   name: 'PDF OCR',
   description: 'Read the text in a scanned PDF or in pictures, copy it out, and make a searchable PDF',
   category: 'pdf',
+  audience: 'general',
   priority: 'P2',
   aliases: ['ocr', 'scanned pdf to text', 'searchable pdf', 'image to text', 'extract text from image', 'tesseract', 'read scanned document', 'make pdf searchable'],
   related: ['pdf-to-images', 'images-to-pdf', 'pdf-split'],

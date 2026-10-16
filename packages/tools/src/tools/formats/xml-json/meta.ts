@@ -6,6 +6,7 @@ export default defineTool({
   name: 'XML ↔ JSON',
   description: 'Convert XML to JSON and JSON back to XML, with attributes kept as @_ keys',
   category: 'formats',
+  audience: 'developer',
   priority: 'P0',
   aliases: ['xml to json', 'json to xml'],
   related: ['xml-format', 'xml-validate', 'json-format', 'yaml-json'],

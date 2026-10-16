@@ -6,6 +6,7 @@ export default defineTool({
   name: 'YAML Formatter',
   description: 'Clean up YAML indentation, optionally sort keys, and keep your comments',
   category: 'formats',
+  audience: 'developer',
   priority: 'P1',
   aliases: ['yaml beautify', 'yaml prettify', 'yml formatter', 'format yaml'],
   related: ['yaml-validate', 'yaml-json'],

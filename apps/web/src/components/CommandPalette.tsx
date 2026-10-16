@@ -11,6 +11,7 @@ import { clearPreferences, getPreferences, setTheme, toggleFavourite } from '@/c
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from '@/ui/shadcn/dialog';
 import { CommandEmpty, CommandGroup, CommandItem, CommandList, CommandSeparator, CommandShortcut } from '@/ui/shadcn/command';
 import { usePreferences } from '../theme';
+import { DevTag } from './ToolCard';
 
 const KIND_LABEL: Record<string, string> = {
   jwt: 'JWT',
@@ -121,6 +122,7 @@ export function CommandPalette({ open, onOpenChange }: { open: boolean; onOpenCh
                   <CommandItem key={t.id} value={t.id} onSelect={() => openTool(t.id)} data-testid={`palette-item-${t.id}`}>
                     <Wrench />
                     <span className="flex-1 truncate">{t.name}</span>
+                    {t.audience === 'developer' && <DevTag />}
                     <CommandShortcut>{categoryName(t.category)}</CommandShortcut>
                   </CommandItem>
                 ))}

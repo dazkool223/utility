@@ -6,6 +6,7 @@ export default defineTool({
   name: 'UUID Decoder',
   description: 'Show the version, variant, embedded timestamp and node of a UUID',
   category: 'crypto',
+  audience: 'developer',
   priority: 'P2',
   aliases: ['guid decode', 'uuid parser', 'uuid version', 'uuid timestamp', 'uuid inspector'],
   related: ['uuid-generate', 'ulid'],

@@ -6,6 +6,7 @@ export default defineTool({
   name: 'Markdown to HTML',
   description: 'Convert Markdown (including GitHub-style tables and task lists) into HTML source code',
   category: 'code',
+  audience: 'developer',
   priority: 'P0',
   aliases: ['md to html', 'markdown converter', 'markdown to html', 'md2html', 'marked', 'gfm'],
   related: ['markdown-preview', 'markdown-table', 'html-entities', 'js-format'],

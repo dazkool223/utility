@@ -18,6 +18,7 @@ export default defineTool({
   name: 'X.509 Certificate Decoder',
   description: 'Decode a PEM certificate: subject, issuer, validity, SANs, key usage and fingerprints',
   category: 'crypto',
+  audience: 'developer',
   priority: 'P1',
   aliases: ['certificate', 'ssl certificate', 'tls cert', 'pem cert', 'x509', 'cer', 'crt'],
   related: ['csr-decode', 'pem-convert', 'csr-generate'],

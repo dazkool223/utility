@@ -6,6 +6,7 @@ export default defineTool({
   name: 'CSR / Self-Signed Certificate Generator',
   description: 'Create a certificate signing request or a self-signed certificate plus its private key',
   category: 'crypto',
+  audience: 'developer',
   priority: 'P2',
   aliases: ['openssl req', 'self signed certificate', 'generate csr', 'ssl certificate', 'localhost certificate'],
   related: ['csr-decode', 'x509-decode', 'rsa-keygen', 'pem-convert'],

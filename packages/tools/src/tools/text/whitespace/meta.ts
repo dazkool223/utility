@@ -6,6 +6,7 @@ export default defineTool({
   name: 'Whitespace & Line-Break Cleanup',
   description: 'Trim lines, collapse extra spaces and blank lines, join lines and normalise line endings',
   category: 'text',
+  audience: 'general',
   priority: 'P1',
   aliases: ['remove extra spaces', 'remove blank lines', 'remove line breaks', 'trim whitespace', 'collapse spaces', 'strip whitespace', 'crlf to lf', 'zero width'],
   related: ['line-tools', 'line-numbers'],

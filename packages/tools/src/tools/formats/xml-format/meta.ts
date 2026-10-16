@@ -6,6 +6,7 @@ export default defineTool({
   name: 'XML Formatter',
   description: 'Pretty-print XML with your choice of indentation',
   category: 'formats',
+  audience: 'developer',
   priority: 'P0',
   aliases: ['xml beautify', 'xml prettify', 'xml pretty print', 'format xml'],
   related: ['xml-minify', 'xml-validate', 'xml-json'],

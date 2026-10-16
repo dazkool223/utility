@@ -6,6 +6,7 @@ export default defineTool({
   name: 'JSON to SQL',
   description: 'Generate CREATE TABLE and INSERT statements from a JSON array of objects',
   category: 'json',
+  audience: 'developer',
   priority: 'P1',
   aliases: ['json to insert', 'json to create table', 'json to mysql', 'json to postgres'],
   related: ['json-csv', 'json-format'],

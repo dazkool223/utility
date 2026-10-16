@@ -6,6 +6,7 @@ export default defineTool({
   name: 'Images to PDF',
   description: 'Put JPG, PNG, WebP and other images into one PDF, one image per page',
   category: 'pdf',
+  audience: 'general',
   priority: 'P0',
   aliases: ['jpg to pdf', 'png to pdf', 'image to pdf', 'photos to pdf', 'scan to pdf', 'webp to pdf'],
   related: ['pdf-merge', 'pdf-to-images', 'pdf-organise'],

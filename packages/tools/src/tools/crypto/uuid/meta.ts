@@ -6,6 +6,7 @@ export default defineTool({
   name: 'UUID Generator',
   description: 'Generate UUID v4, v7 or v1 identifiers, one or thousands at a time',
   category: 'crypto',
+  audience: 'general',
   priority: 'P0',
   aliases: ['guid', 'uuid4', 'uuid7', 'random id'],
   inputKind: 'none',

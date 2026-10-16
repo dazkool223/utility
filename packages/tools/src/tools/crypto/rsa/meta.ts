@@ -6,6 +6,7 @@ export default defineTool({
   name: 'RSA Key Pair Generator',
   description: 'Generate RSA 2048, 3072 or 4096-bit key pairs as PEM (PKCS#8 / SPKI) or JWK',
   category: 'crypto',
+  audience: 'developer',
   priority: 'P1',
   aliases: ['rsa', 'keypair', 'private key', 'public key', 'pkcs8', 'spki', 'jwk'],
   related: ['pem-convert', 'x509-decode', 'ssh-keygen', 'csr-generate'],

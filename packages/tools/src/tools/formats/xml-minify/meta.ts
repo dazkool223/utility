@@ -6,6 +6,7 @@ export default defineTool({
   name: 'XML Minifier',
   description: 'Remove whitespace and optionally comments from XML to make it smaller',
   category: 'formats',
+  audience: 'developer',
   priority: 'P1',
   aliases: ['compress xml', 'compact xml', 'xml one line'],
   related: ['xml-format', 'xml-validate'],

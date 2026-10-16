@@ -6,6 +6,7 @@ export default defineTool({
   name: 'Bcrypt Hash / Compare',
   description: 'Hash a password with bcrypt, or check a password against an existing bcrypt hash',
   category: 'crypto',
+  audience: 'developer',
   priority: 'P1',
   aliases: ['bcrypt', 'password hash', 'blowfish', 'bcrypt verify'],
   related: ['password-generate', 'hash-text', 'password-strength'],

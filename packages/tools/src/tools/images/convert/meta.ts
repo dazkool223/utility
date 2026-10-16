@@ -6,6 +6,7 @@ export default defineTool({
   name: 'Image Format Converter',
   description: 'Convert images between PNG, JPEG, WebP, AVIF, JPEG XL and QOI, in your browser',
   category: 'images',
+  audience: 'general',
   priority: 'P0',
   aliases: ['png to jpg', 'jpg to png', 'webp converter', 'avif converter', 'jxl', 'jpeg xl', 'qoi', 'image converter', 'convert image', 'png to webp', 'heic'],
   related: ['base64-file', 'image-compress', 'image-resize'],

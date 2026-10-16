@@ -6,6 +6,7 @@ export default defineTool({
   name: 'JWT Decoder',
   description: 'Decode a JSON Web Token: header, payload, expiry dates and status (the signature is not verified)',
   category: 'encoders',
+  audience: 'developer',
   priority: 'P0',
   aliases: ['json web token', 'jwt parser', 'bearer token', 'decode jwt', 'jwt debugger', 'access token'],
   related: ['base64-text', 'json-format'],

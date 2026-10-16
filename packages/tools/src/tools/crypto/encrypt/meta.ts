@@ -6,6 +6,7 @@ export default defineTool({
   name: 'Text Encrypt / Decrypt',
   description: 'Encrypt text with a passphrase using AES-GCM, AES-CBC or AES-CTR, and decrypt it again',
   category: 'crypto',
+  audience: 'general',
   priority: 'P0',
   aliases: ['aes', 'aes-gcm', 'encrypt', 'decrypt', 'cipher', 'pbkdf2'],
   related: ['password-generate', 'hmac-generate', 'hash-text'],

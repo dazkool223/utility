@@ -6,6 +6,7 @@ export default defineTool({
   name: 'URL Parser',
   description: 'Split a URL into protocol, host, port, path, query parameters and fragment',
   category: 'web',
+  audience: 'developer',
   priority: 'P1',
   aliases: ['parse url', 'url parts', 'query string', 'query params', 'url breakdown', 'uri parser'],
   related: ['url-encode', 'curl-to-code', 'user-agent-parse', 'json-format'],

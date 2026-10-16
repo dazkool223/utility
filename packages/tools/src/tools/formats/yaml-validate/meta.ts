@@ -6,6 +6,7 @@ export default defineTool({
   name: 'YAML Validator',
   description: 'Lint YAML and find syntax errors, duplicate keys and bad indentation with line and column',
   category: 'formats',
+  audience: 'developer',
   priority: 'P1',
   aliases: ['yaml lint', 'yaml linter', 'check yaml', 'yml validator'],
   related: ['yaml-format', 'yaml-json'],

@@ -77,3 +77,10 @@ test('context-menu handover opens the Tool with the selection, then forgets it',
   const left = await worker!.evaluate(() => chrome.storage.session.get('pending-input'));
   expect(left).toEqual({});
 });
+
+test('the Developer tools switch is on by default in the Extension', async ({ context, extensionId }) => {
+  const page = await context.newPage();
+  await page.goto(`chrome-extension://${extensionId}/app.html`);
+  await expect(page.getByRole('switch', { name: 'Developer tools' })).toBeChecked();
+  await expect(page.getByTestId('tool-card-json-format')).toBeVisible();
+});

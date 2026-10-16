@@ -6,6 +6,7 @@ export default defineTool({
   name: 'NATO Alphabet & Morse Code',
   description: 'Spell text with the NATO phonetic alphabet or convert it to and from Morse code',
   category: 'encoders',
+  audience: 'general',
   priority: 'P1',
   aliases: ['phonetic alphabet', 'nato', 'morse', 'morse code', 'alfa bravo charlie', 'icao spelling'],
   related: ['text-binary', 'text-hex'],

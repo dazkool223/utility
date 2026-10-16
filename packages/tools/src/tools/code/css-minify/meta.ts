@@ -6,6 +6,7 @@ export default defineTool({
   name: 'CSS Minifier',
   description: 'Shrink CSS by removing whitespace and comments and simplifying values (csso)',
   category: 'code',
+  audience: 'developer',
   priority: 'P1',
   aliases: ['compress css', 'minify css', 'css compressor', 'csso', 'css optimizer'],
   related: ['css-format', 'js-minify', 'colour-converter'],

@@ -6,6 +6,7 @@ export default defineTool({
   name: 'Week Number & Day of Year',
   description: 'Find the ISO week number, day of year, quarter and week boundaries for any date',
   category: 'time',
+  audience: 'general',
   priority: 'P2',
   aliases: ['iso week', 'week of year', 'day of year', 'julian day', 'calendar week', 'kw', 'ordinal date'],
   related: ['timestamp-convert', 'date-format', 'eta-calculator'],

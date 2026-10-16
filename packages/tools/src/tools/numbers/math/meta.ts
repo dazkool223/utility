@@ -6,6 +6,7 @@ export default defineTool({
   name: 'Math Expression Evaluator',
   description: 'A scientific calculator for expressions: functions, units, variables, matrices, fractions and big numbers',
   category: 'numbers',
+  audience: 'general',
   priority: 'P1',
   aliases: ['calculator', 'calc', 'mathjs', 'scientific calculator', 'expression', 'formula', 'big number'],
   related: ['unit-converter', 'bitwise-calc', 'number-base'],

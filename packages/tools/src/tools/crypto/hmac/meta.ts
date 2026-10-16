@@ -6,6 +6,7 @@ export default defineTool({
   name: 'HMAC Generator',
   description: 'Compute HMAC-SHA-256, SHA-512, SHA-1, MD5 and more from a message and a secret key',
   category: 'crypto',
+  audience: 'developer',
   priority: 'P1',
   aliases: ['hmac-sha256', 'hmac sha1', 'keyed hash', 'message authentication', 'webhook signature'],
   related: ['hash-text', 'text-encrypt'],

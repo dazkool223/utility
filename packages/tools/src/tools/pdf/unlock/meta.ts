@@ -6,6 +6,7 @@ export default defineTool({
   name: 'Unlock PDF',
   description: 'Remove the password and the print, copy and edit limits from a PDF you have the password for',
   category: 'pdf',
+  audience: 'general',
   priority: 'P0',
   aliases: ['decrypt pdf', 'remove pdf password', 'remove pdf restrictions', 'unprotect pdf', 'pdf password remover'],
   related: ['pdf-protect', 'pdf-merge', 'pdf-split'],

@@ -6,6 +6,7 @@ export default defineTool({
   name: 'Text ↔ Binary',
   description: 'Convert text to binary, octal, decimal or hex bytes and back',
   category: 'encoders',
+  audience: 'general',
   priority: 'P0',
   aliases: ['binary to text', 'text to binary', 'ascii to binary', 'bits', 'bytes'],
   related: ['text-hex', 'base64-text'],

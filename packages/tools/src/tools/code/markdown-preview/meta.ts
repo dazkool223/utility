@@ -6,6 +6,7 @@ export default defineTool({
   name: 'Markdown Preview',
   description: 'Write Markdown and see it rendered live, GitHub style',
   category: 'code',
+  audience: 'general',
   priority: 'P0',
   aliases: ['markdown viewer', 'markdown editor', 'md preview', 'readme preview', 'render markdown', 'gfm preview'],
   related: ['markdown-html', 'markdown-table', 'text-stats'],

@@ -6,6 +6,7 @@ export default defineTool({
   name: 'Regex Tester',
   description: 'Test JavaScript regular expressions: see matches, capture groups and the result of a replacement',
   category: 'text',
+  audience: 'developer',
   priority: 'P0',
   aliases: ['regular expression', 'regexp', 'regex', 'pattern match', 'regex replace', 'test regex'],
   related: ['regex-cheatsheet', 'text-diff'],

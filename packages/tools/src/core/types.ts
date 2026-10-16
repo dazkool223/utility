@@ -19,6 +19,9 @@ export type CategoryId =
   | 'archives'
   | 'binary';
 
+/** Who a Tool is aimed at. Controls what browsing shows; never what search, Smart Paste or direct links can reach. */
+export type Audience = 'general' | 'developer';
+
 export type Priority = 'P0' | 'P1' | 'P2';
 
 /** Which Supported Size applies to this Tool's Tool Input (spec §5). */
@@ -62,6 +65,8 @@ export interface ToolMeta {
   /** One line, shown in search and on the home page. */
   description: string;
   category: CategoryId;
+  /** Required. `developer` Tools are hidden from browsing while the "Developer tools" switch is off. */
+  audience: Audience;
   priority: Priority;
   /** Alternative search terms, e.g. `['b64']`. */
   aliases?: string[];

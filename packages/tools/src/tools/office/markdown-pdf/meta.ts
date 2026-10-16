@@ -6,6 +6,7 @@ export default defineTool({
   name: 'Markdown / HTML → PDF',
   description: 'Turn Markdown or HTML into a print-ready page and save it as a PDF with your browser',
   category: 'office',
+  audience: 'general',
   priority: 'P2',
   aliases: ['markdown to pdf', 'html to pdf', 'md to pdf', 'print to pdf', 'save as pdf', 'document to pdf'],
   inputKind: 'text',

@@ -6,6 +6,7 @@ export default defineTool({
   name: 'JavaScript Minifier',
   description: 'Shrink JavaScript by removing whitespace and comments and shortening names (Terser)',
   category: 'code',
+  audience: 'developer',
   priority: 'P1',
   aliases: ['uglify', 'uglifyjs', 'terser', 'compress js', 'minify javascript', 'js compressor'],
   related: ['js-format', 'css-minify', 'js-benchmark', 'json-minify'],

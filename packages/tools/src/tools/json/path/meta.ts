@@ -6,6 +6,7 @@ export default defineTool({
   name: 'JSONPath Tester',
   description: 'Run JSONPath expressions against JSON and see every match',
   category: 'json',
+  audience: 'developer',
   priority: 'P1',
   aliases: ['jsonpath', 'json query', 'jpath', 'json select'],
   related: ['json-format', 'json-tree'],

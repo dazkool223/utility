@@ -1,16 +1,19 @@
 import { useMemo, useState } from 'react';
 import { Search } from 'lucide-react';
 import { TOOLS, getTool } from '@/core/registry';
-import { CATEGORIES } from '@/core/categories';
+import { browseCategories, browseCategoryTools } from '@/core/audience';
 import { searchTools } from '@/core/search';
 import { Input } from '@/ui/shadcn/input';
 import { ToolCard } from '../components/ToolCard';
 import { SmartPaste } from '../components/SmartPaste';
+import { DeveloperToggle } from '../components/DeveloperToggle';
+import { useDeveloperTools } from '../audience';
 import { usePreferences } from '../theme';
 
 export function HomePage() {
   const [query, setQuery] = useState('');
   const { favourites, recent } = usePreferences();
+  const [showDeveloper] = useDeveloperTools();
   const results = useMemo(() => (query.trim() ? searchTools(query, TOOLS) : null), [query]);
   const favouriteTools = favourites.map(getTool).filter((t) => t !== undefined);
   const recentTools = recent.map(getTool).filter((t) => t !== undefined);
@@ -40,7 +43,7 @@ export function HomePage() {
           {results.length ? (
             <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
               {results.map((t) => (
-                <ToolCard key={t.id} tool={t} />
+                <ToolCard key={t.id} tool={t} showDevTag />
               ))}
             </div>
           ) : (
@@ -51,11 +54,10 @@ export function HomePage() {
         <>
           {favouriteTools.length > 0 && <ToolGroup title="Favourites" tools={favouriteTools} />}
           {recentTools.length > 0 && <ToolGroup title="Recent" tools={recentTools} />}
-          {CATEGORIES.map((c) => {
-            const tools = TOOLS.filter((t) => t.category === c.id);
-            if (!tools.length) return null;
-            return <ToolGroup key={c.id} id={c.id} title={c.name} subtitle={c.description} tools={tools} />;
-          })}
+          <DeveloperToggle />
+          {browseCategories(TOOLS, showDeveloper).map((c) => (
+            <ToolGroup key={c.id} id={c.id} title={c.name} subtitle={c.description} tools={browseCategoryTools(TOOLS, c.id, showDeveloper)} />
+          ))}
         </>
       )}
     </div>

@@ -6,6 +6,7 @@ export default defineTool({
   name: 'Password Strength Estimator',
   description: 'Estimate how hard a password is to guess, with crack-time estimates and tips (zxcvbn)',
   category: 'crypto',
+  audience: 'general',
   priority: 'P2',
   aliases: ['zxcvbn', 'password checker', 'password entropy', 'how strong is my password'],
   related: ['password-generate', 'bcrypt-hash'],

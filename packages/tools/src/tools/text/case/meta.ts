@@ -6,6 +6,7 @@ export default defineTool({
   name: 'Case Converter',
   description: 'Convert text to camelCase, snake_case, kebab-case, Title Case and more, or see every case at once',
   category: 'text',
+  audience: 'general',
   priority: 'P0',
   aliases: ['camelcase', 'snake case', 'kebab case', 'uppercase', 'lowercase', 'title case', 'pascal case', 'constant case', 'sentence case'],
   related: ['slugify', 'line-tools'],

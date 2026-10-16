@@ -6,6 +6,7 @@ export default defineTool({
   name: 'Slugify',
   description: 'Turn titles and phrases into clean URL slugs, with accents transliterated',
   category: 'text',
+  audience: 'developer',
   priority: 'P2',
   aliases: ['url slug', 'slug generator', 'permalink', 'seo url', 'kebab slug'],
   related: ['case-convert', 'url-encode'],

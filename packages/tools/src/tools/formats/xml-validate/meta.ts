@@ -6,6 +6,7 @@ export default defineTool({
   name: 'XML Validator',
   description: 'Check that XML is well-formed and find the line and column of the first error',
   category: 'formats',
+  audience: 'developer',
   priority: 'P1',
   aliases: ['xml well-formed', 'check xml', 'xml lint', 'xml syntax'],
   related: ['xml-format', 'xml-minify', 'xml-json'],

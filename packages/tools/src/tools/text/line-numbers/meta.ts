@@ -6,6 +6,7 @@ export default defineTool({
   name: 'Line Numbers, Prefix & Wrap',
   description: 'Add or remove line numbers, add a prefix or suffix to every line, and wrap long lines',
   category: 'text',
+  audience: 'general',
   priority: 'P1',
   aliases: ['add line numbers', 'number lines', 'prefix lines', 'suffix lines', 'wrap text', 'word wrap', 'quote each line', 'add quotes to lines'],
   related: ['line-tools', 'whitespace-cleanup'],

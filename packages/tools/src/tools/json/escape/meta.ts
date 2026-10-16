@@ -6,6 +6,7 @@ export default defineTool({
   name: 'JSON Escape / Stringify',
   description: 'Turn text or JSON into an escaped JSON string, or unescape a JSON string back',
   category: 'json',
+  audience: 'developer',
   priority: 'P1',
   aliases: ['stringify', 'json stringify', 'unescape json', 'escape json', 'json string'],
   related: ['json-format', 'json-minify'],

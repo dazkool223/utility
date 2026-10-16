@@ -6,6 +6,7 @@ export default defineTool({
   name: 'Video to GIF',
   description: 'Turn a clip from a video into an animated GIF, choosing the size, frame rate and the part to keep',
   category: 'media',
+  audience: 'general',
   priority: 'P2',
   aliases: ['mp4 to gif', 'webm to gif', 'mov to gif', 'gif maker', 'video to gif converter', 'animated gif'],
   related: ['media-info', 'audio-convert', 'image-convert'],

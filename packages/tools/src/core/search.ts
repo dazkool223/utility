@@ -34,6 +34,8 @@ export function searchTools(query: string, tools: readonly ToolMeta[]): ToolMeta
   const terms = query.trim().toLowerCase().split(/\s+/).filter(Boolean);
   if (terms.length === 0) return [...tools];
   const priorityBoost = { P0: 3, P1: 2, P2: 1 } as const;
+  // Search covers every Tool whatever the Developer tools switch says; on equal relevance, general Tools come first.
+  const audienceRank = { general: 0, developer: 1 } as const;
   return tools
     .map((tool) => {
       let total = 0;
@@ -45,6 +47,6 @@ export function searchTools(query: string, tools: readonly ToolMeta[]): ToolMeta
       return { tool, score: total + priorityBoost[tool.priority] };
     })
     .filter((r) => r.score > 0)
-    .sort((a, b) => b.score - a.score || a.tool.name.localeCompare(b.tool.name))
+    .sort((a, b) => b.score - a.score || audienceRank[a.tool.audience] - audienceRank[b.tool.audience] || a.tool.name.localeCompare(b.tool.name))
     .map((r) => r.tool);
 }

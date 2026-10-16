@@ -6,6 +6,7 @@ export default defineTool({
   name: 'List Comparer',
   description: 'Compare two lists and get the union, intersection, or the items only in one of them',
   category: 'text',
+  audience: 'general',
   priority: 'P1',
   aliases: ['set operations', 'compare lists', 'intersection', 'union', 'difference', 'common lines', 'unique to list'],
   related: ['line-tools', 'text-diff'],

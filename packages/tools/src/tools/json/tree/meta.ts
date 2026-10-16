@@ -6,6 +6,7 @@ export default defineTool({
   name: 'JSON Tree Viewer',
   description: 'Explore JSON as a collapsible tree and copy the path of any value',
   category: 'json',
+  audience: 'developer',
   priority: 'P1',
   aliases: ['json viewer', 'json explorer', 'json path copy', 'json outline'],
   related: ['json-format'],

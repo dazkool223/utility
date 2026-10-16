@@ -6,6 +6,7 @@ export default defineTool({
   name: 'Password Generator',
   description: 'Strong random passwords and passphrases from your browser\'s secure random source, with an entropy readout',
   category: 'crypto',
+  audience: 'general',
   priority: 'P0',
   aliases: ['passphrase', 'random password', 'diceware', 'pwgen'],
   related: ['password-strength', 'nanoid-generate', 'bcrypt-hash'],

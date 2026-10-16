@@ -6,6 +6,7 @@ export default defineTool({
   name: 'Line Tools',
   description: 'Sort, deduplicate, reverse, shuffle and trim lines of text',
   category: 'text',
+  audience: 'general',
   priority: 'P0',
   aliases: ['sort lines', 'remove duplicate lines', 'dedupe', 'unique lines', 'reverse lines', 'shuffle lines', 'randomize lines', 'trim lines', 'sort alphabetically'],
   related: ['list-compare', 'whitespace-cleanup', 'line-numbers', 'case-convert'],

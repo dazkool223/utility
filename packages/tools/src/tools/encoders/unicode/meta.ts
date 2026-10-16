@@ -6,6 +6,7 @@ export default defineTool({
   name: 'Unicode Escape & Code Points',
   description: 'Convert text to \\uXXXX, U+XXXX or HTML escapes and back, and list the code points in a string',
   category: 'encoders',
+  audience: 'developer',
   priority: 'P1',
   aliases: ['unicode', 'utf-16', 'code points', 'u+', 'unicode to text', 'text to unicode', 'codepoint', 'surrogate pair'],
   related: ['string-escape', 'html-entities', 'text-hex'],

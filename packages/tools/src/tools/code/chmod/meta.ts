@@ -6,6 +6,7 @@ export default defineTool({
   name: 'chmod Calculator',
   description: 'Convert Unix file permissions between octal (755) and symbolic (rwxr-xr-x) and see what each means',
   category: 'code',
+  audience: 'developer',
   priority: 'P1',
   aliases: ['file permissions', 'unix permissions', 'octal permissions', 'rwx', 'umask', 'chmod 755', 'linux permissions'],
   related: ['number-base', 'bitwise-calc', 'js-benchmark'],

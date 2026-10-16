@@ -6,6 +6,7 @@ export default defineTool({
   name: 'Image Resizer',
   description: 'Change the pixel size of a picture by width and height or by percentage, with high-quality resampling',
   category: 'images',
+  audience: 'general',
   priority: 'P0',
   aliases: ['resize image', 'scale image', 'change image size', 'shrink image', 'enlarge image', 'image dimensions', 'thumbnail'],
   related: ['image-convert', 'image-compress', 'image-crop-rotate'],

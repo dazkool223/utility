@@ -6,6 +6,7 @@ export default defineTool({
   name: 'ULID Generator / Decoder',
   description: 'Generate sortable ULIDs, or decode one to see its timestamp and random part',
   category: 'crypto',
+  audience: 'developer',
   priority: 'P1',
   aliases: ['ulid', 'sortable id', 'lexicographic id'],
   related: ['uuid-generate', 'uuid-decode', 'nanoid-generate'],

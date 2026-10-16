@@ -6,6 +6,7 @@ export default defineTool({
   name: 'User-Agent Parser',
   description: 'Identify the browser, engine, operating system and device behind a User-Agent string',
   category: 'web',
+  audience: 'developer',
   priority: 'P1',
   aliases: ['ua parser', 'user agent', 'browser detector', 'useragent', 'whatismybrowser', 'parse ua'],
   related: ['url-parse', 'curl-to-code'],

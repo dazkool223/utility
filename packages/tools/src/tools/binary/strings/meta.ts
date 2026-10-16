@@ -6,6 +6,7 @@ export default defineTool({
   name: 'Strings Extractor',
   description: 'Pull readable text (ASCII and UTF-16) out of any binary file, with offsets',
   category: 'binary',
+  audience: 'developer',
   priority: 'P2',
   aliases: ['strings', 'extract text from binary', 'printable strings', 'binary strings', 'exe strings'],
   related: ['text-hex', 'file-checksum', 'magic-detect'],

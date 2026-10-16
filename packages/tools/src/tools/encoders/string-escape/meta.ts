@@ -6,6 +6,7 @@ export default defineTool({
   name: 'String Escape / Unescape',
   description: 'Escape or unescape text for JavaScript, JSON, Java, C#, SQL, XML and CSV',
   category: 'encoders',
+  audience: 'developer',
   priority: 'P0',
   aliases: ['escape string', 'unescape string', 'backslash escape', 'add slashes', 'escape quotes', 'sql escape', 'xml escape'],
   related: ['json-escape', 'html-entities', 'url-encode', 'unicode-escape'],

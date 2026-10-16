@@ -6,6 +6,7 @@ export default defineTool({
   name: 'Date Parser & Formatter',
   description: 'Read a date in almost any format and see it as ISO 8601, RFC 2822, SQL, US/EU styles, Unix time and a custom pattern',
   category: 'time',
+  audience: 'general',
   priority: 'P1',
   aliases: ['date converter', 'iso 8601', 'rfc 2822', 'rfc 3339', 'format date', 'parse date', 'date format', 'strftime', 'date-fns format'],
   related: ['timestamp-convert', 'week-number'],

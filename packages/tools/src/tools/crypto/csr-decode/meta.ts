@@ -16,6 +16,7 @@ export default defineTool({
   name: 'CSR Decoder',
   description: 'Decode a PEM certificate signing request: subject, public key, requested SANs and signature check',
   category: 'crypto',
+  audience: 'developer',
   priority: 'P2',
   aliases: ['csr', 'certificate request', 'pkcs10', 'certificate signing request'],
   related: ['csr-generate', 'x509-decode', 'pem-convert'],

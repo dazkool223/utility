@@ -6,6 +6,7 @@ export default defineTool({
   name: 'IPv6 Tools',
   description: 'Expand and compress IPv6 addresses, inspect prefixes, and generate unique local (ULA) networks',
   category: 'network',
+  audience: 'developer',
   priority: 'P1',
   aliases: ['ipv6 expand', 'ipv6 compress', 'ipv6 shorten', 'ula', 'unique local address', 'ipv6 subnet', 'fd00'],
   related: ['ipv4-subnet', 'ip-format', 'ip-range-cidr', 'mac-address'],

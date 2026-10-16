@@ -6,6 +6,7 @@ export default defineTool({
   name: 'QR Code Decoder',
   description: 'Read the text or link inside a QR code from an image file or your camera',
   category: 'numbers',
+  audience: 'general',
   priority: 'P1',
   aliases: ['qr reader', 'qr scanner', 'scan qr', 'read qr code', 'decode qr'],
   related: ['qr-generate', 'totp-hotp'],

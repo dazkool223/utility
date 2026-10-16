@@ -6,6 +6,7 @@ export default defineTool({
   name: 'JSON ↔ CSV',
   description: 'Convert JSON arrays to CSV and CSV back to JSON, with nested objects flattened',
   category: 'json',
+  audience: 'general',
   priority: 'P0',
   aliases: ['csv to json', 'json to csv', 'tsv'],
   related: ['json-format', 'json-sql'],

@@ -6,6 +6,7 @@ export default defineTool({
   name: 'ANSI Escape Remover & ANSI to HTML',
   description: 'Strip terminal colour codes from text, or turn ANSI-coloured output into HTML',
   category: 'text',
+  audience: 'developer',
   priority: 'P2',
   aliases: ['strip ansi', 'remove ansi', 'ansi to html', 'terminal colors', 'escape codes', 'remove color codes', 'ansi colors'],
   related: ['html-entities', 'whitespace-cleanup'],

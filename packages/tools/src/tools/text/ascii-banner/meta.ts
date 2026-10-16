@@ -6,6 +6,7 @@ export default defineTool({
   name: 'ASCII Art Banner',
   description: 'Turn text into large ASCII-art lettering with FIGlet fonts',
   category: 'text',
+  audience: 'general',
   priority: 'P2',
   aliases: ['figlet', 'ascii art', 'text art', 'banner', 'big text', 'ascii text'],
   related: ['text-stats', 'case-convert'],

@@ -6,6 +6,7 @@ export default defineTool({
   name: 'PEM / DER / JWK Converter',
   description: 'Convert keys and certificates between PEM, DER (hex or Base64) and JSON Web Key',
   category: 'crypto',
+  audience: 'developer',
   priority: 'P2',
   aliases: ['pem to der', 'der to pem', 'jwk to pem', 'pem to jwk', 'pkcs1 to pkcs8', 'key converter'],
   related: ['rsa-keygen', 'x509-decode', 'csr-decode', 'ssh-keygen'],

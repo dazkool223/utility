@@ -6,6 +6,7 @@ export default defineTool({
   name: 'Reorder & Delete PDF Pages',
   description: 'See every page as a thumbnail, then drag to reorder, rotate or delete pages',
   category: 'pdf',
+  audience: 'general',
   priority: 'P0',
   aliases: ['reorder pdf', 'delete pdf pages', 'remove pages', 'pdf organiser', 'pdf organizer', 'rearrange pdf', 'page organiser'],
   related: ['pdf-split', 'pdf-merge', 'pdf-rotate'],

@@ -6,6 +6,7 @@ export default defineTool({
   name: 'Regex Cheatsheet',
   description: 'A searchable quick reference for JavaScript regular expression syntax, flags and common patterns',
   category: 'text',
+  audience: 'developer',
   priority: 'P2',
   aliases: ['regex reference', 'regular expression syntax', 'regex help', 'regex cheat sheet', 'regexp syntax'],
   related: ['regex-tester'],

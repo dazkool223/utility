@@ -6,6 +6,7 @@ export default defineTool({
   name: 'Word Count & Text Statistics',
   description: 'Count words, characters, sentences and paragraphs, and estimate reading time',
   category: 'text',
+  audience: 'general',
   priority: 'P0',
   aliases: ['word count', 'character count', 'char count', 'count words', 'reading time', 'letter count', 'sentence count'],
   related: ['line-tools', 'case-convert'],

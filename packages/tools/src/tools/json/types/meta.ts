@@ -6,6 +6,7 @@ export default defineTool({
   name: 'JSON to Types',
   description: 'Generate TypeScript, Go, Rust, Java, Kotlin, C#, Swift, Zod or Python types from a JSON sample',
   category: 'json',
+  audience: 'developer',
   priority: 'P2',
   aliases: ['json to typescript', 'json to go', 'json to struct', 'json to class', 'quicktype', 'json to interface'],
   related: ['json-format'],

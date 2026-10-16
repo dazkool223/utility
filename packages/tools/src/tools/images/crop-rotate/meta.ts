@@ -6,6 +6,7 @@ export default defineTool({
   name: 'Image Crop, Rotate & Flip',
   description: 'Crop a picture by dragging or typing the area, turn it in quarter steps and mirror it, then save it',
   category: 'images',
+  audience: 'general',
   priority: 'P1',
   aliases: ['crop image', 'rotate image', 'flip image', 'mirror image', 'cut image', 'trim image', 'crop photo', 'aspect ratio crop'],
   related: ['image-resize', 'image-compress', 'image-annotate'],

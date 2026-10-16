@@ -6,6 +6,7 @@ export default defineTool({
   name: 'Markdown Table Generator',
   description: 'Turn CSV or spreadsheet cells into a Markdown table, or a Markdown table back into CSV',
   category: 'text',
+  audience: 'general',
   priority: 'P2',
   aliases: ['csv to markdown', 'tsv to markdown', 'table to markdown', 'markdown table', 'github table', 'excel to markdown'],
   related: ['json-csv', 'markdown-preview'],

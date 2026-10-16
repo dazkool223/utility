@@ -6,6 +6,7 @@ export default defineTool({
   name: 'Text Diff',
   description: 'Compare two texts and highlight what was added, removed or changed, line by line, word by word or by character',
   category: 'text',
+  audience: 'general',
   priority: 'P0',
   aliases: ['compare text', 'diff checker', 'text compare', 'find differences', 'file compare', 'unified diff', 'patch'],
   related: ['json-diff', 'list-compare'],

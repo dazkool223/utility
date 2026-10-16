@@ -6,6 +6,7 @@ export default defineTool({
   name: 'JSON Formatter',
   description: 'Pretty-print and validate JSON with your choice of indentation',
   category: 'json',
+  audience: 'developer',
   priority: 'P0',
   aliases: ['beautify', 'prettify', 'pretty print', 'json lint'],
   related: ['json-validate', 'json-minify', 'json-csv', 'json-tree', 'json-diff', 'json-path', 'json-repair', 'json-escape', 'json-types', 'json-sql'],

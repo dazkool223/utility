@@ -6,6 +6,7 @@ export default defineTool({
   name: 'Unix Timestamp Converter',
   description: 'Convert Unix timestamps (seconds, milliseconds, microseconds, nanoseconds) to dates and dates back',
   category: 'time',
+  audience: 'developer',
   priority: 'P0',
   aliases: ['epoch', 'unix time', 'unix timestamp', 'epoch converter', 'timestamp to date', 'date to timestamp', 'posix time'],
   related: ['date-format', 'week-number'],

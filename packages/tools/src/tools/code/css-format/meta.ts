@@ -6,6 +6,7 @@ export default defineTool({
   name: 'CSS Formatter',
   description: 'Beautify CSS, SCSS and Less with consistent indentation',
   category: 'code',
+  audience: 'developer',
   priority: 'P1',
   aliases: ['css beautifier', 'css prettify', 'beautify css', 'format scss', 'format less', 'css pretty print'],
   related: ['css-minify', 'js-format', 'sql-format', 'colour-converter'],

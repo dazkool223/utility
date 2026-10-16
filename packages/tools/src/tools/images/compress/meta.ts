@@ -6,6 +6,7 @@ export default defineTool({
   name: 'Image Compressor',
   description: 'Make photos and graphics smaller with MozJPEG, WebP, AVIF or lossless PNG recompression, and compare before and after',
   category: 'images',
+  audience: 'general',
   priority: 'P0',
   aliases: ['compress image', 'reduce image size', 'optimize image', 'optimise image', 'shrink jpg', 'compress png', 'mozjpeg', 'oxipng', 'squoosh', 'tinypng'],
   related: ['image-convert', 'image-resize', 'image-crop-rotate'],

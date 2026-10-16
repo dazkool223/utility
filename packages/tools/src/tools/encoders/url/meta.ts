@@ -6,6 +6,7 @@ export default defineTool({
   name: 'URL Encode / Decode',
   description: 'Percent-encode or decode text, as a URL component, a full URI or form data',
   category: 'encoders',
+  audience: 'developer',
   priority: 'P0',
   aliases: ['percent encoding', 'urlencode', 'urldecode', 'encodeURIComponent', 'uri encode', 'query string encode'],
   related: ['base64-text', 'html-entities', 'string-escape'],

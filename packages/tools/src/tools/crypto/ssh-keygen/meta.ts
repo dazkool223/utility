@@ -6,6 +6,7 @@ export default defineTool({
   name: 'SSH Key Generator / Fingerprint',
   description: 'Generate Ed25519 or RSA SSH keys in OpenSSH format, or compute the fingerprint of a public key',
   category: 'crypto',
+  audience: 'developer',
   priority: 'P2',
   aliases: ['ssh', 'ssh-keygen', 'openssh', 'ed25519', 'authorized_keys', 'ssh fingerprint', 'id_rsa'],
   related: ['rsa-keygen', 'pem-convert', 'pgp'],

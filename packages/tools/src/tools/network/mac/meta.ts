@@ -6,6 +6,7 @@ export default defineTool({
   name: 'MAC Address Generator / Formatter',
   description: 'Reformat MAC addresses (colon, hyphen, Cisco dot), inspect their flags, or generate random ones',
   category: 'network',
+  audience: 'developer',
   priority: 'P1',
   aliases: ['mac address', 'mac format', 'eui-48', 'eui-64', 'random mac', 'oui'],
   related: ['ipv6-tools', 'ip-format', 'ipv4-subnet'],

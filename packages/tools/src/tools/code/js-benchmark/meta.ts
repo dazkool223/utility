@@ -6,6 +6,7 @@ export default defineTool({
   name: 'JS Benchmark Builder',
   description: 'Turn code snippets into a ready-to-run script that compares their speed in operations per second',
   category: 'code',
+  audience: 'developer',
   priority: 'P2',
   aliases: ['benchmark', 'jsperf', 'performance test', 'microbenchmark', 'compare code speed', 'ops per second'],
   related: ['js-format', 'js-minify', 'chmod-calc'],

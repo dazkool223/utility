@@ -6,6 +6,7 @@ export default defineTool({
   name: 'Stopwatch',
   description: 'A stopwatch with lap times that runs in your browser',
   category: 'time',
+  audience: 'general',
   priority: 'P2',
   aliases: ['timer', 'lap timer', 'chronometer', 'elapsed time'],
   related: ['eta-calculator', 'timestamp-convert'],

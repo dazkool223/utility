@@ -6,6 +6,7 @@ export default defineTool({
   name: 'Text ↔ Hex / Hexdump',
   description: 'Convert text to hex bytes and back, or print a classic hexdump',
   category: 'encoders',
+  audience: 'developer',
   priority: 'P1',
   aliases: ['hex encode', 'hex decode', 'hex to text', 'text to hex', 'xxd', 'hexdump', 'hex dump'],
   related: ['text-binary', 'base64-text'],

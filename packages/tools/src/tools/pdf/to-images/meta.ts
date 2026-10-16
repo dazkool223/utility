@@ -6,6 +6,7 @@ export default defineTool({
   name: 'PDF to Images',
   description: 'Turn PDF pages into PNG or JPG images at the resolution you choose',
   category: 'pdf',
+  audience: 'general',
   priority: 'P1',
   aliases: ['pdf to png', 'pdf to jpg', 'pdf to jpeg', 'render pdf', 'pdf screenshot', 'pdf pages to images'],
   related: ['images-to-pdf', 'pdf-split', 'pdf-ocr'],

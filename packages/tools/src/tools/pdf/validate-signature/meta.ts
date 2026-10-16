@@ -6,6 +6,7 @@ export default defineTool({
   name: 'PDF Signature Validator',
   description: 'Check whether a PDF’s digital signatures are intact, who signed it, and whether it was changed afterwards',
   category: 'pdf',
+  audience: 'developer',
   priority: 'P1',
   aliases: ['verify pdf signature', 'pdf digital signature', 'check signed pdf', 'pdf signed', 'pades', 'pkcs7'],
   related: ['pdf-protect', 'pdf-unlock', 'pdf-to-images'],

@@ -6,6 +6,7 @@ export default defineTool({
   name: 'SQLite Database Browser',
   description: 'Open a .sqlite or .db file, browse its tables and run SQL queries',
   category: 'office',
+  audience: 'developer',
   priority: 'P2',
   aliases: ['sqlite', 'sqlite3', '.db', 'database viewer', 'sql query', 'db browser'],
   related: ['sql-format'],

@@ -6,6 +6,7 @@ export default defineTool({
   name: 'nanoid & Random Token Generator',
   description: 'Generate nanoid, custom-alphabet, hex, Base64 and URL-safe random tokens and API keys',
   category: 'crypto',
+  audience: 'developer',
   priority: 'P1',
   aliases: ['nanoid', 'random token', 'api key', 'random string', 'secret', 'session id'],
   related: ['uuid-generate', 'ulid', 'password-generate'],

@@ -6,6 +6,7 @@ export default defineTool({
   name: 'TOML ↔ YAML',
   description: 'Convert TOML to YAML and YAML to TOML',
   category: 'formats',
+  audience: 'developer',
   priority: 'P1',
   aliases: ['toml to yaml', 'yaml to toml'],
   related: ['toml-json', 'yaml-json'],

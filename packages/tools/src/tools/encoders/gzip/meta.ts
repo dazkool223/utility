@@ -6,6 +6,7 @@ export default defineTool({
   name: 'Gzip / Deflate Text',
   description: 'Compress text with gzip or deflate and get Base64, or decompress Base64 back to text',
   category: 'encoders',
+  audience: 'developer',
   priority: 'P1',
   aliases: ['gzip', 'gunzip', 'deflate', 'inflate', 'compress text', 'zlib'],
   related: ['base64-text', 'text-hex'],

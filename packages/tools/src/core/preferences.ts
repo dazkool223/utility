@@ -7,6 +7,8 @@ export type Theme = 'system' | 'light' | 'dark';
 
 export interface Preferences {
   theme: Theme;
+  /** The "Developer tools" switch. Absent until the user chooses; the default depends on the Surface. */
+  developerTools?: boolean;
   favourites: string[];
   recent: string[];
 }
@@ -34,6 +36,7 @@ export function getPreferences(): Preferences {
     const parsed = raw ? (JSON.parse(raw) as Partial<Preferences>) : {};
     cache = {
       theme: parsed.theme === 'light' || parsed.theme === 'dark' || parsed.theme === 'system' ? parsed.theme : DEFAULTS.theme,
+      ...(typeof parsed.developerTools === 'boolean' ? { developerTools: parsed.developerTools } : {}),
       favourites: Array.isArray(parsed.favourites) ? parsed.favourites.filter((x) => typeof x === 'string') : [],
       recent: Array.isArray(parsed.recent) ? parsed.recent.filter((x) => typeof x === 'string').slice(0, MAX_RECENT) : [],
     };
@@ -60,6 +63,15 @@ export function subscribePreferences(listener: Listener): () => void {
 
 export function setTheme(theme: Theme) {
   save({ ...getPreferences(), theme });
+}
+
+/** Whether browsing shows developer Tools: a stored choice always wins over the Surface's default. */
+export function showsDeveloperTools(prefs: Preferences, defaultOn: boolean): boolean {
+  return prefs.developerTools ?? defaultOn;
+}
+
+export function setDeveloperTools(on: boolean) {
+  save({ ...getPreferences(), developerTools: on });
 }
 
 export function toggleFavourite(toolId: string) {

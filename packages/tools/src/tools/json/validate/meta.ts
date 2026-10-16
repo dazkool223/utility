@@ -6,6 +6,7 @@ export default defineTool({
   name: 'JSON Validator',
   description: 'Check whether JSON is valid and find the exact line and column of any error',
   category: 'json',
+  audience: 'developer',
   priority: 'P0',
   aliases: ['json lint', 'check json', 'json syntax'],
   related: ['json-format', 'json-repair', 'json-minify'],

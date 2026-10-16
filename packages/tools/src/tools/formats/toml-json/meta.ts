@@ -6,6 +6,7 @@ export default defineTool({
   name: 'TOML ↔ JSON',
   description: 'Convert TOML to JSON and JSON to TOML',
   category: 'formats',
+  audience: 'developer',
   priority: 'P1',
   aliases: ['toml to json', 'json to toml', 'cargo toml', 'pyproject'],
   related: ['toml-yaml', 'json-format', 'yaml-json'],

@@ -6,6 +6,7 @@ export default defineTool({
   name: 'PGP Keygen / Encrypt / Sign / Verify',
   description: 'Generate OpenPGP keys, encrypt and decrypt messages, and sign or verify cleartext signatures',
   category: 'crypto',
+  audience: 'developer',
   priority: 'P2',
   aliases: ['openpgp', 'gpg', 'gnupg', 'pgp encrypt', 'pgp sign', 'pgp key'],
   related: ['rsa-keygen', 'ssh-keygen', 'text-encrypt'],

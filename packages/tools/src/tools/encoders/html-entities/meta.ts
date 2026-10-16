@@ -6,6 +6,7 @@ export default defineTool({
   name: 'HTML Entity Encode / Decode',
   description: 'Escape text as HTML entities (named, hex or decimal) or decode entities back to text',
   category: 'encoders',
+  audience: 'developer',
   priority: 'P0',
   aliases: ['html escape', 'html unescape', 'html encode', 'html decode', 'escape html', 'special characters', 'amp lt gt'],
   related: ['url-encode', 'string-escape', 'unicode-escape'],

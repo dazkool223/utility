@@ -6,6 +6,7 @@ export default defineTool({
   name: 'SQL Formatter',
   description: 'Pretty-print SQL for PostgreSQL, MySQL, SQLite, SQL Server, Oracle and more',
   category: 'code',
+  audience: 'developer',
   priority: 'P0',
   aliases: ['sql beautifier', 'sql prettify', 'format sql', 'sql pretty print', 'beautify sql', 'sql lint'],
   related: ['json-sql', 'js-format', 'css-format', 'json-format'],

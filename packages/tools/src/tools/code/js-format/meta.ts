@@ -6,6 +6,7 @@ export default defineTool({
   name: 'JavaScript / TypeScript Formatter',
   description: 'Format JavaScript, JSX and TypeScript with Prettier, with your choice of style options',
   category: 'code',
+  audience: 'developer',
   priority: 'P0',
   aliases: ['prettier', 'beautify js', 'js beautifier', 'format typescript', 'format javascript', 'prettify', 'ts formatter', 'jsx formatter'],
   related: ['js-minify', 'css-format', 'sql-format', 'js-benchmark', 'json-format'],

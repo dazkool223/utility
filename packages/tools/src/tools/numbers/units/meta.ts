@@ -6,6 +6,7 @@ export default defineTool({
   name: 'Unit Converter',
   description: 'Convert length, mass, temperature, time, data size, speed, area, volume, pressure, energy and more',
   category: 'numbers',
+  audience: 'general',
   priority: 'P0',
   aliases: ['convert units', 'km to miles', 'celsius to fahrenheit', 'kg to lb', 'bytes to gb', 'mib', 'metric imperial'],
   related: ['number-base', 'math-evaluator'],

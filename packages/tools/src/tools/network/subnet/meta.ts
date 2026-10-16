@@ -6,6 +6,7 @@ export default defineTool({
   name: 'IPv4 Subnet / CIDR Calculator',
   description: 'Network, broadcast, host range, mask and wildcard for any IPv4 address and prefix, with subnet splitting',
   category: 'network',
+  audience: 'developer',
   priority: 'P0',
   aliases: ['cidr', 'subnet mask', 'netmask', 'subnetting', 'ip calculator', 'wildcard mask', 'broadcast address'],
   related: ['ip-range-cidr', 'ip-format', 'ipv6-tools'],

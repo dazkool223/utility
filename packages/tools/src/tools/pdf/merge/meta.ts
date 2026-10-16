@@ -6,6 +6,7 @@ export default defineTool({
   name: 'Merge PDFs',
   description: 'Combine several PDF files into one, in the order you choose',
   category: 'pdf',
+  audience: 'general',
   priority: 'P0',
   aliases: ['combine pdf', 'join pdf', 'concatenate pdf', 'append pdf'],
   related: ['pdf-split', 'pdf-organise', 'images-to-pdf'],

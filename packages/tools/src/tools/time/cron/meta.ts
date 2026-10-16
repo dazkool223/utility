@@ -6,6 +6,7 @@ export default defineTool({
   name: 'Cron Expression Parser & Builder',
   description: 'Explain a cron expression in plain English and list its next runs, for Unix, Kubernetes, Spring, Quartz and AWS cron',
   category: 'time',
+  audience: 'developer',
   priority: 'P1',
   aliases: ['crontab', 'cron expression', 'cron schedule', 'cron generator', 'cron builder', 'quartz cron', 'cronjob', 'next run'],
   related: ['timestamp-convert', 'date-format'],

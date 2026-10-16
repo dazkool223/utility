@@ -14,6 +14,10 @@ _Avoid_: Util, utility, app, widget
 A named grouping of Tools shown together in navigation (e.g. JSON, PDF, Images).
 _Avoid_: Section, module, group
 
+**Audience**:
+Whether a Tool is aimed at everyone (`general`) or at developers (`developer`). It controls what browsing shows when the "Developer tools" switch is off; it never limits what search, Smart Paste, Favourites, Recents or direct links can reach. The switch is stored as a Preference, off by default on the Website and on in the Extension.
+_Avoid_: Level, mode, role
+
 **Tool Input**:
 Whatever the user gives a Tool: pasted text, a dropped file, or form values. It is never persisted, not even on the device.
 _Avoid_: Data, payload, document

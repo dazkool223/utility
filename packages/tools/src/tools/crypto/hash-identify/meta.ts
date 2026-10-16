@@ -6,6 +6,7 @@ export default defineTool({
   name: 'Hash Type Identifier',
   description: 'Guess which algorithm produced a hash from its length, format and prefix',
   category: 'crypto',
+  audience: 'developer',
   priority: 'P2',
   aliases: ['identify hash', 'what hash', 'hash detector', 'hashid'],
   related: ['hash-text', 'bcrypt-hash', 'file-checksum'],

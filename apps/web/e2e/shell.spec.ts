@@ -1,3 +1,4 @@
+import type { Page } from '@playwright/test';
 import { test, expect, fillInput, output } from './fixtures';
 
 const MOD = process.platform === 'darwin' ? 'Meta' : 'Control';
@@ -13,7 +14,7 @@ test('serves the strict security headers', async ({ page }) => {
 
 test('home page lists Tools and searches by alias', async ({ page }) => {
   await page.goto('/');
-  await expect(page.getByTestId('tool-card-json-format')).toBeVisible();
+  await expect(page.getByTestId('tool-card-pdf-merge')).toBeVisible();
   await page.getByTestId('home-search').fill('b64');
   await expect(page.getByTestId('tool-card-base64-text')).toBeVisible();
   await page.getByTestId('tool-card-base64-text').click();
@@ -92,4 +93,52 @@ test('a new visitor gets the dark theme; light and system can be chosen and pers
   await theme('System').click();
   await page.reload();
   await expect(theme('System')).toBeChecked();
+});
+
+const devSwitch = (page: Page) => page.getByRole('switch', { name: 'Developer tools' });
+
+test.describe('Developer tools switch', () => {
+  test('is off by default: browsing hides developer Tools and developer-only Categories', async ({ page }) => {
+    await page.goto('/');
+    await expect(devSwitch(page)).not.toBeChecked();
+    await expect(page.getByRole('heading', { name: 'Images' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'YAML, XML, TOML & CSV' })).toHaveCount(0);
+    const text = page.getByRole('region', { name: 'Text' });
+    await expect(text.getByTestId('tool-card-case-convert')).toBeVisible();
+    await expect(text.getByTestId('tool-card-regex-tester')).toHaveCount(0);
+  });
+
+  test('turning it on reveals developer Tools after the general ones, and survives a reload as a Preference', async ({ page }) => {
+    await page.goto('/');
+    await devSwitch(page).click();
+    await expect(page.getByRole('heading', { name: 'YAML, XML, TOML & CSV' })).toBeVisible();
+    const cards = page.getByRole('region', { name: 'Text' }).locator('[data-testid^=tool-card-]');
+    const ids = await cards.evaluateAll((els) => els.map((e) => e.getAttribute('data-testid')!.replace('tool-card-', '')));
+    expect(ids.indexOf('regex-tester')).toBeGreaterThan(ids.indexOf('line-tools'));
+    await page.reload();
+    await expect(devSwitch(page)).toBeChecked();
+    const stored = JSON.parse(await page.evaluate(() => localStorage.getItem('utility:preferences:v1')!));
+    expect(stored.developerTools).toBe(true);
+    expect(Object.keys(stored).sort()).toEqual(['developerTools', 'favourites', 'recent', 'theme']);
+  });
+
+  test('search still finds developer Tools and tags them; general Tools carry no tag', async ({ page }) => {
+    await page.goto('/');
+    await page.getByTestId('home-search').fill('jwt');
+    await expect(page.getByTestId('tool-card-jwt-decode')).toContainText('Dev');
+    await page.getByTestId('home-search').fill('merge pdf');
+    await expect(page.getByTestId('tool-card-pdf-merge')).not.toContainText('Dev');
+  });
+
+  test('Smart Paste suggests a developer Tool for a JWT', async ({ page }) => {
+    await page.goto('/');
+    await page.getByTestId('smart-paste').fill('eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMjM0NTY3ODkwIn0.dozjgNryP4J3jVmNHl0w5N_XgL0n3I9PlFUP0THsR8U');
+    await expect(page.getByTestId('smart-jwt-decode')).toBeVisible();
+  });
+
+  test('a direct link to a developer Tool opens with the switch off', async ({ page }) => {
+    await page.goto('/json/format');
+    await expect(page.getByTestId('tool-page')).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'JSON Formatter' })).toBeVisible();
+  });
 });
