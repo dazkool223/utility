@@ -26,7 +26,9 @@ function toolComponent(meta: ToolMeta): ComponentType<ToolProps> {
   return c;
 }
 
-class ToolErrorBoundary extends Component<{ children: ReactNode }, { error: Error | null }> {
+const LOAD_FAILURE = /dynamically imported module|importing a module script failed|failed to fetch|loading chunk/i;
+
+class ToolErrorBoundary extends Component<{ children: ReactNode; onRetry: () => void }, { error: Error | null }> {
   state = { error: null as Error | null };
   static getDerivedStateFromError(error: Error) {
     return { error };
@@ -34,10 +36,23 @@ class ToolErrorBoundary extends Component<{ children: ReactNode }, { error: Erro
   render() {
     if (this.state.error)
       return (
-        <div role="alert" className="rounded-lg border border-destructive/40 bg-destructive/5 p-4 text-sm">
-          <p className="font-medium">This Tool hit an unexpected error.</p>
-          <p className="mt-1 font-mono text-xs text-muted-foreground">{this.state.error.message}</p>
-          <Button className="mt-3" size="sm" variant="outline" onClick={() => this.setState({ error: null })}>
+        <div role="alert" className="rounded-lg border border-l-4 border-l-destructive bg-card p-4 text-sm">
+          <p className="font-medium">Sorry, this Tool ran into a problem.</p>
+          <p className="mt-1 text-muted-foreground">Reloading it usually sorts things out. If it keeps happening, try another browser tab or come back a little later.</p>
+          <p className="mt-2 font-mono text-xs text-muted-foreground">{this.state.error.message}</p>
+          <Button
+            className="mt-3"
+            size="sm"
+            variant="outline"
+            onClick={() => {
+              // A Tool whose code failed to load is remembered as failed by some browsers until the page itself reloads.
+              if (LOAD_FAILURE.test(this.state.error!.message)) window.location.reload();
+              else {
+                this.props.onRetry();
+                this.setState({ error: null });
+              }
+            }}
+          >
             Reload Tool
           </Button>
         </div>
@@ -58,6 +73,7 @@ function ToolView({ meta }: { meta: ToolMeta }) {
   const linkOut = surface === 'extension' && meta.heavy;
   const isFavourite = favourites.includes(meta.id);
   const [pending] = useState(() => peekPendingInput(meta.id));
+  const [attempt, setAttempt] = useState(0);
   const ToolComponent = toolComponent(meta);
   const restrictions = (meta.restrictions ?? []).filter((r) => !r.applies || r.applies());
   const related = (meta.related ?? []).map(getTool).filter((t) => t !== undefined);
@@ -156,7 +172,14 @@ function ToolView({ meta }: { meta: ToolMeta }) {
             </Button>
           </div>
         ) : (
-        <ToolErrorBoundary>
+        <ToolErrorBoundary
+          key={attempt}
+          onRetry={() => {
+            // A Tool that failed to load stays failed in React.lazy; drop it so reloading really tries again.
+            lazyCache.delete(meta.id);
+            setAttempt((a) => a + 1);
+          }}
+        >
           <Suspense fallback={<div className="h-96 animate-pulse rounded-lg bg-muted" aria-label="Loading Tool" />}>
             <ToolComponent initialInput={pending?.input} initialFiles={pending?.files} />
           </Suspense>

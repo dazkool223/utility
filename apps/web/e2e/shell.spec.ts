@@ -1,4 +1,4 @@
-import type { Page } from '@playwright/test';
+import type { Page, Route } from '@playwright/test';
 import { test, expect, fillInput, listTools, output } from './fixtures';
 
 const MOD = process.platform === 'darwin' ? 'Meta' : 'Control';
@@ -23,6 +23,7 @@ test('home page lists Tools and searches by alias', async ({ page }) => {
 
 test('command palette opens with the shortcut and navigates', async ({ page }) => {
   await page.goto('/');
+  await expect(page.getByTestId('home-search')).toBeFocused(); // the app is ready for keyboard shortcuts
   await page.keyboard.press(`${MOD}+k`);
   await expect(page.getByTestId('palette')).toBeVisible();
   await page.getByTestId('palette-input').fill('json formatter');
@@ -33,6 +34,7 @@ test('command palette opens with the shortcut and navigates', async ({ page }) =
 
 test('palette Smart Paste opens the Tool with the pasted data', async ({ page }) => {
   await page.goto('/');
+  await expect(page.getByTestId('home-search')).toBeFocused();
   await page.keyboard.press(`${MOD}+k`);
   await page.getByTestId('palette-input').fill('{"pasted":true}');
   await page.getByText('Open in JSON Formatter').click();
@@ -77,9 +79,28 @@ test('invalid input shows a plain-language error', async ({ page }) => {
   await expect(page.getByTestId('tool-error')).toContainText('Invalid JSON');
 });
 
-test('unknown path shows not found', async ({ page }) => {
+test('unknown path shows a kind not-found page with a way back', async ({ page }) => {
   await page.goto('/nope/nothing');
-  await expect(page.getByText('Page not found')).toBeVisible();
+  await expect(page.getByRole('heading', { name: "We can't find that page" })).toBeVisible();
+  await page.getByRole('link', { name: 'Take me home' }).click();
+  await expect(page).toHaveURL(/\/$/);
+  await expect(page.getByTestId('home-search')).toBeVisible();
+});
+
+test('a Tool that fails to load shows kind wording and can be reloaded', async ({ page, browserName }) => {
+  // WebKit keeps serving the failed module fetch after a reload while the request is intercepted, so recovery cannot be simulated there.
+  test.skip(browserName === 'webkit', 'WebKit remembers an aborted module fetch across a reload');
+  // Block the Tool's code so loading it fails, as a flaky network or a stale cache would.
+  const toolChunks = /\/assets\/Tool-[^/]*\.js$/;
+  let blocked = true;
+  await page.route(toolChunks, (route: Route) => (blocked ? route.abort() : route.continue()));
+  await page.goto('/json/format');
+  const alert = page.getByRole('alert');
+  await expect(alert).toContainText('Sorry, this Tool ran into a problem');
+  await expect(alert.getByRole('button', { name: 'Reload Tool' })).toBeVisible();
+  blocked = false;
+  await alert.getByRole('button', { name: 'Reload Tool' }).click();
+  await expect(page.getByTestId('tool-input')).toBeVisible({ timeout: 15_000 });
 });
 
 test('a new visitor gets the dark theme; light and system can be chosen and persist', async ({ page }) => {
@@ -234,6 +255,7 @@ test.describe('Privacy chip', () => {
   test('the privacy message appears once, as the rail chip, on every kind of page', async ({ page }) => {
     for (const path of ['/', '/category/images', '/a-z', '/pdf/merge', '/images/convert', '/privacy']) {
       await page.goto(path);
+      await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
       await expect(page.getByTestId('privacy-chip')).toHaveCount(1);
       await expect(page.getByTestId('privacy-chip')).toBeVisible();
       await expect(page.getByText('Private, works offline')).toHaveCount(1);
@@ -322,6 +344,7 @@ test.describe('Persistent rail', () => {
   test('is on the home page and Tool pages, with the switch, Categories and no header search button', async ({ page }) => {
     for (const path of ['/', '/pdf/merge', '/privacy']) {
       await page.goto(path);
+      await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
       await expect(rail(page)).toBeVisible();
       await expect(rail(page).getByRole('switch', { name: 'Developer tools' })).toBeVisible();
       await expect(rail(page).getByRole('link', { name: 'Images' })).toBeVisible();
