@@ -81,7 +81,7 @@ function ToolView({ meta }: { meta: ToolMeta }) {
               </Link>{' '}
               / <Link href={`/#${meta.category}`}>{categoryName(meta.category)}</Link>
             </nav>
-            <h1 className="flex items-center gap-2 text-xl font-semibold tracking-tight">
+            <h1 className="flex items-center gap-2 font-serif text-xl font-semibold tracking-tight">
               {meta.name}
               {meta.heavy && <Badge variant="secondary">Downloads an engine on first use</Badge>}
             </h1>
@@ -94,7 +94,7 @@ function ToolView({ meta }: { meta: ToolMeta }) {
             onClick={() => toggleFavourite(meta.id)}
             data-testid="favourite"
           >
-            <Star className={cn(isFavourite && 'fill-current text-amber-500')} />
+            <Star className={cn(isFavourite && 'fill-current text-brand')} />
             {isFavourite ? 'Favourite' : 'Add to favourites'}
           </Button>
         </header>

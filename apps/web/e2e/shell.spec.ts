@@ -80,3 +80,16 @@ test('unknown path shows not found', async ({ page }) => {
   await page.goto('/nope/nothing');
   await expect(page.getByText('Page not found')).toBeVisible();
 });
+
+test('a new visitor gets the dark theme; light and system can be chosen and persist', async ({ page }) => {
+  await page.goto('/');
+  const theme = (name: string) => page.getByRole('radio', { name });
+  await expect(theme('Dark')).toBeChecked();
+  await theme('Light').click();
+  await expect(theme('Light')).toBeChecked();
+  await page.reload();
+  await expect(theme('Light')).toBeChecked();
+  await theme('System').click();
+  await page.reload();
+  await expect(theme('System')).toBeChecked();
+});

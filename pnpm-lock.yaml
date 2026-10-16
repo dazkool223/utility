@@ -162,6 +162,15 @@ importers:
       '@ffmpeg/util':
         specifier: ^0.12.2
         version: 0.12.2
+      '@fontsource-variable/figtree':
+        specifier: ^5.3.0
+        version: 5.3.0
+      '@fontsource-variable/fraunces':
+        specifier: ^5.3.0
+        version: 5.3.0
+      '@fontsource-variable/jetbrains-mono':
+        specifier: ^5.3.0
+        version: 5.3.0
       '@jsquash/avif':
         specifier: ^2.1.1
         version: 2.1.1
@@ -1093,6 +1102,15 @@ packages:
 
   '@floating-ui/utils@0.2.12':
     resolution: {integrity: sha512-HpCo8tmWzLVad5s2d19EhAz5zqrrQ6s69qd6moPMQvkOuSwDT1YgRfWSVuc4ennqrgv3OHppiOGMQ7oC13yIww==}
+
+  '@fontsource-variable/figtree@5.3.0':
+    resolution: {integrity: sha512-VRVodD7OiG7apQwE8/2fMjaqpY/a0qRJqL5HtYj8CKIVps+9amaFcdfKmDIf7iqYQx6iPLlArVXAfKeIZmVcNQ==}
+
+  '@fontsource-variable/fraunces@5.3.0':
+    resolution: {integrity: sha512-9BYGySn4AHEJdgp9Z28tQ3X+laJMEOITXkQarZXeloWQZDq5oOvXJ3kDA8c7MGIfpogIaZfjrQBqmda8POOCKA==}
+
+  '@fontsource-variable/jetbrains-mono@5.3.0':
+    resolution: {integrity: sha512-F32xpS2NsGYoQi2ADSkKTgpJj7ozajsGgDJ8woTnqjmIB+dxDIqImjl4pXZVEExu8UFZ2ndhmX18EBS/hdz3Lw==}
 
   '@glideapps/ts-necessities@2.2.3':
     resolution: {integrity: sha512-gXi0awOZLHk3TbW55GZLCPP6O+y/b5X1pBXKBVckFONSwF1z1E5ND2BGJsghQFah+pW7pkkyFb2VhUQI2qhL5w==}
@@ -5802,6 +5820,12 @@ snapshots:
       react-dom: 19.3.0(react@19.3.0)
 
   '@floating-ui/utils@0.2.12': {}
+
+  '@fontsource-variable/figtree@5.3.0': {}
+
+  '@fontsource-variable/fraunces@5.3.0': {}
+
+  '@fontsource-variable/jetbrains-mono@5.3.0': {}
 
   '@glideapps/ts-necessities@2.2.3': {}
 

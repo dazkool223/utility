@@ -8,7 +8,7 @@ import { BusyLine, readFile, useTask } from '../_lib/ui';
 import type { SignatureReport, ValidationResult, Verdict } from './logic';
 
 const VERDICT: Record<Verdict, { label: string; className: string }> = {
-  valid: { label: 'Intact', className: 'bg-emerald-500/15 text-emerald-700 dark:text-emerald-400' },
+  valid: { label: 'Intact', className: 'bg-success text-success-foreground' },
   'valid-extended': { label: 'Intact, file extended later', className: 'bg-warning text-warning-foreground' },
   invalid: { label: 'Not valid', className: 'bg-destructive/10 text-destructive' },
   unsupported: { label: 'Could not be checked', className: 'bg-muted text-muted-foreground' },

@@ -2,16 +2,18 @@ import { Link } from 'wouter';
 import { Monitor, Moon, Search, Sun } from 'lucide-react';
 import { setTheme, type Theme } from '@/core/preferences';
 import { Button } from '@/ui/shadcn/button';
-import { Tooltip, TooltipContent, TooltipTrigger } from '@/ui/shadcn/tooltip';
+import { ToggleGroup, ToggleGroupItem } from '@/ui/shadcn/toggle-group';
 import { usePreferences } from '../theme';
 import { MOD } from '../platform';
 
-const NEXT_THEME: Record<Theme, Theme> = { system: 'light', light: 'dark', dark: 'system' };
-const THEME_ICON = { system: Monitor, light: Sun, dark: Moon } as const;
+const THEMES = [
+  { value: 'light', label: 'Light', Icon: Sun },
+  { value: 'dark', label: 'Dark', Icon: Moon },
+  { value: 'system', label: 'System', Icon: Monitor },
+] as const;
 
 export function Header({ onOpenPalette }: { onOpenPalette: () => void }) {
   const { theme } = usePreferences();
-  const ThemeIcon = THEME_ICON[theme];
   return (
     <header className="sticky top-0 z-40 border-b bg-background/85 backdrop-blur">
       <div className="mx-auto flex h-14 max-w-7xl items-center gap-3 px-4 sm:px-6">
@@ -26,14 +28,22 @@ export function Header({ onOpenPalette }: { onOpenPalette: () => void }) {
           <span className="flex-1 text-left">Search tools…</span>
           <kbd className="rounded border bg-muted px-1.5 font-mono text-[10px]">{MOD} K</kbd>
         </Button>
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <Button variant="ghost" size="icon" aria-label={`Theme: ${theme}`} onClick={() => setTheme(NEXT_THEME[theme])}>
-              <ThemeIcon />
-            </Button>
-          </TooltipTrigger>
-          <TooltipContent>Theme: {theme}</TooltipContent>
-        </Tooltip>
+        <ToggleGroup
+          type="single"
+          variant="outline"
+          size="sm"
+          aria-label="Theme"
+          value={theme}
+          onValueChange={(v) => {
+            if (v) setTheme(v as Theme);
+          }}
+        >
+          {THEMES.map(({ value, label, Icon }) => (
+            <ToggleGroupItem key={value} value={value} aria-label={label} title={label} className="data-[state=on]:bg-primary data-[state=on]:text-primary-foreground">
+              <Icon />
+            </ToggleGroupItem>
+          ))}
+        </ToggleGroup>
       </div>
     </header>
   );

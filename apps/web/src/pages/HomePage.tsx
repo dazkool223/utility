@@ -18,7 +18,7 @@ export function HomePage() {
   return (
     <div className="flex flex-col gap-8">
       <section className="flex flex-col gap-4 pt-4">
-        <h1 className="text-2xl font-semibold tracking-tight sm:text-3xl">{TOOLS.length} developer tools. Nothing leaves your browser.</h1>
+        <h1 className="font-serif text-2xl font-semibold tracking-tight sm:text-3xl">{TOOLS.length} developer tools. Nothing leaves your browser.</h1>
         <div className="relative">
           <Search className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground" />
           <Input

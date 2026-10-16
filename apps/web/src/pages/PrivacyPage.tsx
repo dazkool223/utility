@@ -4,7 +4,7 @@ import { Button } from '@/ui/shadcn/button';
 export function PrivacyPage() {
   return (
     <article className="prose-sm flex max-w-2xl flex-col gap-4 text-sm leading-relaxed">
-      <h1 className="text-2xl font-semibold tracking-tight">Nothing leaves your browser</h1>
+      <h1 className="font-serif text-2xl font-semibold tracking-tight">Nothing leaves your browser</h1>
       <p>Every Tool runs on your device. We don't have a server that receives your data, and the browser itself enforces this:</p>
       <ul className="list-disc space-y-2 pl-5">
         <li>

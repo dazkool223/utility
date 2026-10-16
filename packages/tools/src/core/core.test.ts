@@ -123,6 +123,9 @@ describe('preferences', () => {
     };
     clearPreferences();
   });
+  it('defaults to the dark theme for a new visitor', () => {
+    expect(getPreferences().theme).toBe('dark');
+  });
   it('toggles favourites and keeps recents unique, newest first, capped', () => {
     toggleFavourite('a');
     expect(getPreferences().favourites).toEqual(['a']);

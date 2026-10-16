@@ -6,69 +6,127 @@
 
 @custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
 
-/* shadcn/ui theme tokens (new-york, neutral). Dark mode is applied by setting data-theme="dark" on <html>. */
-:root {
-  --radius: 0.625rem;
-  --background: oklch(0.985 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.48 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --warning: oklch(0.96 0.06 90);
-  --warning-foreground: oklch(0.42 0.09 70);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
-  --brand: oklch(0.55 0.2 264);
-  --syn-string: oklch(0.5 0.13 150);
-  --syn-number: oklch(0.55 0.16 45);
-  --syn-keyword: oklch(0.5 0.2 300);
-  --syn-property: oklch(0.48 0.15 250);
-  --syn-type: oklch(0.52 0.14 200);
-  --syn-function: oklch(0.5 0.15 270);
-  --syn-comment: oklch(0.6 0 0);
+/* Dark is the default: it applies unless data-theme="light" is set (theme-boot sets data-theme from Preferences). */
+@custom-variant dark (&:where(:root:not([data-theme="light"]), :root:not([data-theme="light"]) *));
+
+/* Fonts are bundled and self-hosted (ADR 0001): latin subset only, to stay inside the performance budgets. */
+@font-face {
+  font-family: "Fraunces Variable";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900;
+  src: url("../../node_modules/@fontsource-variable/fraunces/files/fraunces-latin-wght-normal.woff2") format("woff2-variations");
+}
+@font-face {
+  font-family: "Figtree Variable";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 300 900;
+  src: url("../../node_modules/@fontsource-variable/figtree/files/figtree-latin-wght-normal.woff2") format("woff2-variations");
+}
+@font-face {
+  font-family: "JetBrains Mono Variable";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 800;
+  src: url("../../node_modules/@fontsource-variable/jetbrains-mono/files/jetbrains-mono-latin-wght-normal.woff2") format("woff2-variations");
 }
 
-[data-theme="dark"] {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --warning: oklch(0.32 0.06 80);
-  --warning-foreground: oklch(0.9 0.1 90);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
-  --brand: oklch(0.72 0.15 264);
-  --syn-string: oklch(0.8 0.13 150);
-  --syn-number: oklch(0.8 0.13 60);
-  --syn-keyword: oklch(0.78 0.14 310);
-  --syn-property: oklch(0.8 0.1 240);
-  --syn-type: oklch(0.82 0.1 200);
-  --syn-function: oklch(0.8 0.12 270);
-  --syn-comment: oklch(0.62 0 0);
+/*
+ * Theme tokens. Warm cocoa dark (default) and cream light.
+ * - Surfaces layer upwards: background (page) < card < popover.
+ * - --primary / --brand / --ring are the one terracotta accent (primary actions, focus, active state, the Favourite star).
+ * - --accent is the quiet hover surface, not a colour.
+ * - success / info / warning are tinted notice pairs (bg + foreground); destructive is a solid red.
+ * - --cat-l / --cat-c: shared lightness and chroma for Category tints (ticket 04 adds one hue per Category).
+ */
+:root {
+  --radius: 0.75rem;
+  --background: oklch(0.185 0.012 55);
+  --foreground: oklch(0.94 0.014 80);
+  --card: oklch(0.225 0.014 55);
+  --card-foreground: oklch(0.94 0.014 80);
+  --popover: oklch(0.265 0.016 55);
+  --popover-foreground: oklch(0.94 0.014 80);
+  --primary: oklch(0.7 0.13 45);
+  --primary-foreground: oklch(0.2 0.02 50);
+  --secondary: oklch(0.3 0.015 55);
+  --secondary-foreground: oklch(0.94 0.014 80);
+  --muted: oklch(0.27 0.013 55);
+  --muted-foreground: oklch(0.73 0.025 70);
+  --accent: oklch(0.31 0.02 55);
+  --accent-foreground: oklch(0.96 0.012 80);
+  --destructive: oklch(0.7 0.18 25);
+  --destructive-foreground: oklch(0.2 0.03 25);
+  --success: oklch(0.29 0.05 150);
+  --success-foreground: oklch(0.86 0.12 150);
+  --info: oklch(0.29 0.05 245);
+  --info-foreground: oklch(0.86 0.09 240);
+  --warning: oklch(0.31 0.06 85);
+  --warning-foreground: oklch(0.88 0.1 90);
+  --border: oklch(0.95 0.03 80 / 12%);
+  --input: oklch(0.95 0.03 80 / 17%);
+  --ring: oklch(0.7 0.13 45);
+  --brand: oklch(0.7 0.13 45);
+  --cat-l: 0.74;
+  --cat-c: 0.09;
+  --syn-string: oklch(0.8 0.12 150);
+  --syn-number: oklch(0.8 0.12 65);
+  --syn-keyword: oklch(0.78 0.13 25);
+  --syn-property: oklch(0.8 0.09 230);
+  --syn-type: oklch(0.82 0.09 190);
+  --syn-function: oklch(0.82 0.1 90);
+  --syn-comment: oklch(0.64 0.02 70);
+  --shadow-soft: 0 1px 2px oklch(0.1 0.02 50 / 0.35), 0 4px 14px oklch(0.1 0.02 50 / 0.25);
   color-scheme: dark;
+}
+
+[data-theme="light"] {
+  --background: oklch(0.965 0.014 85);
+  --foreground: oklch(0.24 0.02 55);
+  --card: oklch(0.99 0.008 85);
+  --card-foreground: oklch(0.24 0.02 55);
+  --popover: oklch(1 0.004 85);
+  --popover-foreground: oklch(0.24 0.02 55);
+  --primary: oklch(0.52 0.14 42);
+  --primary-foreground: oklch(0.99 0.01 85);
+  --secondary: oklch(0.93 0.02 80);
+  --secondary-foreground: oklch(0.28 0.02 55);
+  --muted: oklch(0.94 0.016 80);
+  --muted-foreground: oklch(0.46 0.03 60);
+  --accent: oklch(0.92 0.025 75);
+  --accent-foreground: oklch(0.24 0.02 55);
+  --destructive: oklch(0.5 0.19 27);
+  --destructive-foreground: oklch(0.99 0.01 85);
+  --success: oklch(0.94 0.05 150);
+  --success-foreground: oklch(0.37 0.09 150);
+  --info: oklch(0.94 0.03 240);
+  --info-foreground: oklch(0.4 0.1 245);
+  --warning: oklch(0.95 0.07 90);
+  --warning-foreground: oklch(0.42 0.09 70);
+  --border: oklch(0.87 0.02 75);
+  --input: oklch(0.84 0.025 75);
+  --ring: oklch(0.58 0.14 42);
+  --brand: oklch(0.52 0.14 42);
+  --cat-l: 0.55;
+  --cat-c: 0.1;
+  --syn-string: oklch(0.45 0.12 150);
+  --syn-number: oklch(0.5 0.13 55);
+  --syn-keyword: oklch(0.48 0.17 15);
+  --syn-property: oklch(0.45 0.11 240);
+  --syn-type: oklch(0.45 0.09 195);
+  --syn-function: oklch(0.45 0.11 75);
+  --syn-comment: oklch(0.5 0.02 70);
+  --shadow-soft: 0 1px 2px oklch(0.4 0.04 60 / 0.1), 0 4px 14px oklch(0.4 0.04 60 / 0.08);
+  color-scheme: light;
+}
+
+@theme {
+  --font-sans: "Figtree Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Fraunces Variable", ui-serif, Georgia, serif;
+  --font-mono: "JetBrains Mono Variable", ui-monospace, "Cascadia Code", "SF Mono", Menlo, Consolas, monospace;
+  --shadow-sm: var(--shadow-soft);
+  --shadow-lg: 0 8px 30px oklch(0.1 0.02 50 / 0.3);
 }
 
 @theme inline {
@@ -91,13 +149,17 @@
   --color-accent: var(--accent);
   --color-accent-foreground: var(--accent-foreground);
   --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
+  --color-info: var(--info);
+  --color-info-foreground: var(--info-foreground);
   --color-warning: var(--warning);
   --color-warning-foreground: var(--warning-foreground);
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
   --color-brand: var(--brand);
-  --font-mono: ui-monospace, "Cascadia Code", "SF Mono", Menlo, Consolas, monospace;
 }
 
 @layer base {
@@ -109,13 +171,23 @@
   }
 }
 
-/* CodeMirror theming to match the tokens. */
+/* Respect the reduced-motion preference everywhere. */
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* CodeMirror theming to match the tokens: dense, flat, monospaced. */
 .u-editor .cm-editor { height: 100%; background: var(--card); color: var(--card-foreground); }
 .u-editor .cm-editor.cm-focused { outline: none; }
 .u-editor .cm-scroller { font-family: var(--font-mono); font-size: 0.85rem; }
 .u-editor .cm-gutters { background: var(--muted); color: var(--muted-foreground); border-right: 1px solid var(--border); }
-.u-editor .cm-activeLine, .u-editor .cm-activeLineGutter { background: color-mix(in oklch, var(--brand) 7%, transparent); }
-.u-editor .cm-cursor { border-left-color: var(--foreground); }
+.u-editor .cm-activeLine, .u-editor .cm-activeLineGutter { background: color-mix(in oklch, var(--brand) 8%, transparent); }
+.u-editor .cm-cursor { border-left-color: var(--brand); }
 .u-editor .cm-placeholder { color: var(--muted-foreground); }
 .u-editor[data-readonly] .cm-activeLine { background: transparent; }
-.u-editor .cm-selectionBackground, .u-editor .cm-focused .cm-selectionBackground { background: color-mix(in oklch, var(--brand) 25%, transparent) !important; }
+.u-editor .cm-selectionBackground, .u-editor .cm-focused .cm-selectionBackground { background: color-mix(in oklch, var(--brand) 28%, transparent) !important; }

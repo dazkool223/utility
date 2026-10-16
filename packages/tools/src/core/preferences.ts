@@ -13,7 +13,7 @@ export interface Preferences {
 
 const KEY = 'utility:preferences:v1';
 const MAX_RECENT = 8;
-const DEFAULTS: Preferences = { theme: 'system', favourites: [], recent: [] };
+const DEFAULTS: Preferences = { theme: 'dark', favourites: [], recent: [] };
 
 type Listener = (prefs: Preferences) => void;
 const listeners = new Set<Listener>();
@@ -33,7 +33,7 @@ export function getPreferences(): Preferences {
     const raw = storage()?.getItem(KEY);
     const parsed = raw ? (JSON.parse(raw) as Partial<Preferences>) : {};
     cache = {
-      theme: parsed.theme === 'light' || parsed.theme === 'dark' ? parsed.theme : 'system',
+      theme: parsed.theme === 'light' || parsed.theme === 'dark' || parsed.theme === 'system' ? parsed.theme : DEFAULTS.theme,
       favourites: Array.isArray(parsed.favourites) ? parsed.favourites.filter((x) => typeof x === 'string') : [],
       recent: Array.isArray(parsed.recent) ? parsed.recent.filter((x) => typeof x === 'string').slice(0, MAX_RECENT) : [],
     };
