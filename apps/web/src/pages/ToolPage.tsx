@@ -79,7 +79,7 @@ function ToolView({ meta }: { meta: ToolMeta }) {
               <Link href="/" className="hover:underline">
                 Tools
               </Link>{' '}
-              / <Link href={`/#${meta.category}`}>{categoryName(meta.category)}</Link>
+              / <Link href={`/category/${meta.category}`}>{categoryName(meta.category)}</Link>
             </nav>
             <h1 className="flex items-center gap-2 font-serif text-xl font-semibold tracking-tight">
               {meta.name}

@@ -5,6 +5,8 @@ import { registerNavigate, TOOL_EVENTS } from '@/core/host';
 import { Header } from './components/Header';
 import { Rail } from './components/Rail';
 import { HomePage } from './pages/HomePage';
+import { CategoryPage } from './pages/CategoryPage';
+import { AzPage } from './pages/AzPage';
 import { ToolPage } from './pages/ToolPage';
 import { NotFound } from './pages/NotFound';
 import { SurfaceContext, WEBSITE_URL, type SurfaceConfig } from './surface';
@@ -78,6 +80,8 @@ export function App({ surface = { surface: 'website', websiteUrl: WEBSITE_URL } 
           <Switch>
             <Route path="/" component={HomePage} />
             <Route path="/privacy" component={PrivacyPage} />
+            <Route path="/a-z" component={AzPage} />
+            <Route path="/category/:id">{(params) => <CategoryPage id={params.id} />}</Route>
             <Route path="/:category/:slug">{(params) => <ToolPage path={`${params.category}/${params.slug}`} />}</Route>
             <Route component={NotFound} />
           </Switch>

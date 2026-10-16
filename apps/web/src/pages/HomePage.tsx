@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Link } from 'wouter';
 import { TOOLS, getTool } from '@/core/registry';
 import { browseCategories, browseCategoryTools } from '@/core/audience';
 import { categoryColour, type Category } from '@/core/categories';
@@ -42,7 +43,7 @@ function ToolGroup({ id, category, title, subtitle, tools, empty }: { id?: strin
       <div className="flex items-baseline gap-3">
         <h2 id={`${title}-h`} className={category ? 'flex items-center gap-2 font-serif text-lg font-semibold' : 'text-base font-semibold'}>
           {Icon && <Icon className="size-4" style={{ color: categoryColour(category!.id) }} aria-hidden />}
-          {title}
+          {category ? <Link href={`/category/${category.id}`} className="hover:underline">{title}</Link> : title}
         </h2>
         {subtitle && <span className="text-xs text-muted-foreground">{subtitle}</span>}
       </div>

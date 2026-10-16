@@ -1,5 +1,5 @@
 import type { Page } from '@playwright/test';
-import { test, expect, fillInput, output } from './fixtures';
+import { test, expect, fillInput, listTools, output } from './fixtures';
 
 const MOD = process.platform === 'darwin' ? 'Meta' : 'Control';
 
@@ -167,6 +167,53 @@ test.describe('Home bench', () => {
   });
 });
 
+const cardIds = (page: Page) =>
+  page.locator('[data-testid^=tool-card-]').evaluateAll((els) => els.map((e) => e.getAttribute('data-testid')!.replace('tool-card-', '')));
+
+test.describe('Category view and A-Z index', () => {
+  test('a Category in the rail opens a name-only grid that respects the switch, general Tools first', async ({ page }) => {
+    await page.goto('/');
+    await page.getByRole('navigation', { name: 'Browse Tools' }).getByRole('link', { name: 'Text', exact: true }).click();
+    await expect(page).toHaveURL(/\/category\/text$/);
+    await expect(page.getByRole('heading', { level: 1, name: 'Text' })).toBeVisible();
+    await expect(page.getByTestId('tool-card-case-convert')).toHaveText('Case Converter');
+    await expect(page.getByTestId('tool-card-regex-tester')).toHaveCount(0);
+    await page.getByRole('switch', { name: 'Developer tools' }).click();
+    const ids = await cardIds(page);
+    expect(ids).toContain('regex-tester');
+    expect(ids.indexOf('regex-tester')).toBeGreaterThan(ids.indexOf('line-tools'));
+  });
+
+  test('the breadcrumb on a Tool page links to its Category view', async ({ page }) => {
+    await page.goto('/pdf/merge');
+    await page.getByRole('navigation', { name: 'Breadcrumb' }).getByRole('link', { name: 'PDF' }).click();
+    await expect(page).toHaveURL(/\/category\/pdf$/);
+    await expect(page.getByTestId('tool-card-pdf-merge')).toBeVisible();
+  });
+
+  test('a link to a developer-only Category opens and offers to reveal its Tools', async ({ page }) => {
+    await page.goto('/category/formats');
+    await page.getByRole('button', { name: 'Show developer Tools' }).click();
+    await expect(page.getByTestId('tool-card-toml-json')).toBeVisible();
+  });
+
+  test('the A-Z index is reachable from the rail, alphabetical, and respects the switch', async ({ page }) => {
+    const all = await listTools(page);
+    await page.getByRole('navigation', { name: 'Browse Tools' }).getByRole('link', { name: 'A–Z index' }).click();
+    await expect(page).toHaveURL(/\/a-z$/);
+    const off = await cardIds(page);
+    expect(off.length).toBeGreaterThan(0);
+    expect(off.length).toBeLessThan(all.length);
+    expect(off).not.toContain('jwt-decode');
+    await page.getByRole('switch', { name: 'Developer tools' }).click();
+    const on = await cardIds(page);
+    expect(on).toHaveLength(all.length);
+    const names = new Map(all.map((t) => [t.id, t.name]));
+    const sorted = on.map((id) => names.get(id)!);
+    expect(sorted).toEqual([...sorted].sort((a, b) => a.localeCompare(b)));
+  });
+});
+
 const rail = (page: Page) => page.getByRole('navigation', { name: 'Browse Tools' });
 
 test.describe('Persistent rail', () => {
@@ -208,7 +255,8 @@ test.describe('Persistent rail', () => {
     await expect(toggle).toBeChecked();
     await rail(page).getByRole('link', { name: 'Images' }).focus();
     await page.keyboard.press('Enter');
-    await expect(page).toHaveURL(/\/#images$/);
+    await expect(page).toHaveURL(/\/category\/images$/);
+    await expect(page.getByRole('heading', { level: 1, name: 'Images' })).toBeVisible();
   });
 
   test('on a narrow screen the rail collapses into a menu, and the palette shortcut still works', async ({ page }) => {

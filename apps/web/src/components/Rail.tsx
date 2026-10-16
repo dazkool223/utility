@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 import { Link, useLocation } from 'wouter';
-import { Search } from 'lucide-react';
+import { ArrowDownAZ, Search } from 'lucide-react';
 import { TOOLS, getTool } from '@/core/registry';
 import { browseCategories } from '@/core/audience';
 import { categoryColour } from '@/core/categories';
@@ -57,9 +57,15 @@ export function Rail({ onNavigate, onOpenPalette }: { onNavigate?: () => void; o
         </RailGroup>
       )}
       <RailGroup title="Categories">
+        <li>
+          <Link href="/a-z" className={linkClass} aria-current={location === '/a-z' ? 'page' : undefined} onClick={onNavigate}>
+            <ArrowDownAZ className="size-4 shrink-0 text-muted-foreground" aria-hidden />
+            A–Z index
+          </Link>
+        </li>
         {browseCategories(TOOLS, showDeveloper).map((c) => (
           <li key={c.id}>
-            <Link href={`/#${c.id}`} className={linkClass} onClick={onNavigate}>
+            <Link href={`/category/${c.id}`} className={linkClass} aria-current={location === `/category/${c.id}` ? 'page' : undefined} onClick={onNavigate}>
               <c.icon className="size-4 shrink-0" style={{ color: categoryColour(c.id) }} aria-hidden />
               {c.name}
             </Link>
