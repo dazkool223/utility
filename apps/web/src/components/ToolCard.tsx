@@ -5,9 +5,10 @@ import type { ToolMeta } from '@/core/types';
 
 /**
  * A Tool in a list. Browse grids show the name and the Category colour edge only; the description appears on hover and focus.
- * Search results (`detailed`) also show the description and Category, and mark developer Tools with a "Dev" tag.
+ * Search results (`detailed`) also show the description and Category, the matched Alias (`alias`, e.g. "b64 → Base64"),
+ * and mark developer Tools with a "Dev" tag.
  */
-export function ToolCard({ tool, detailed = false }: { tool: ToolMeta; detailed?: boolean }) {
+export function ToolCard({ tool, detailed = false, alias }: { tool: ToolMeta; detailed?: boolean; alias?: string }) {
   const edge = { borderLeftColor: categoryColour(tool.category) };
   const className = 'group flex flex-col gap-1 rounded-lg border border-l-4 bg-card px-3 py-2 transition-colors hover:bg-accent focus-visible:bg-accent';
   if (detailed) {
@@ -18,6 +19,11 @@ export function ToolCard({ tool, detailed = false }: { tool: ToolMeta; detailed?
           {tool.name}
           {tool.audience === 'developer' && <DevTag />}
         </span>
+        {alias && (
+          <span className="text-xs text-muted-foreground" data-testid="matched-alias">
+            {alias} → {tool.name}
+          </span>
+        )}
         <span className="line-clamp-2 text-xs text-muted-foreground">{tool.description}</span>
         <span className="flex items-center gap-1 text-xs text-muted-foreground">
           <Icon className="size-3" style={{ color: categoryColour(tool.category) }} aria-hidden />

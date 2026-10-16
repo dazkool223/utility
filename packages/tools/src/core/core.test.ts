@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it } from 'vitest';
 import { detectFile, detectText } from './detect';
-import { searchTools } from './search';
+import { searchTools, searchToolsWithMatch } from './search';
 import { TOOLS, getTool, getToolByPath, toolsForKinds } from './registry';
 import { CATEGORIES } from './categories';
 import { clearPreferences, getPreferences, recordRecent, setDeveloperTools, showsDeveloperTools, toggleFavourite } from './preferences';
@@ -100,6 +100,10 @@ describe('searchTools', () => {
     expect(searchTools('json format', TOOLS)[0]?.id).toBe('json-format');
     expect(searchTools('b64', TOOLS)[0]?.id).toBe('base64-text');
     expect(searchTools('guid', TOOLS)[0]?.id).toBe('uuid-generate');
+  });
+  it('reports the matched Alias, and none when the name matched', () => {
+    expect(searchToolsWithMatch('b64', TOOLS)[0]).toMatchObject({ alias: 'b64' });
+    expect(searchToolsWithMatch('json format', TOOLS)[0]?.alias).toBeUndefined();
   });
   it('returns everything for an empty query and nothing for garbage', () => {
     expect(searchTools('', TOOLS)).toHaveLength(TOOLS.length);

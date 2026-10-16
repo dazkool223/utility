@@ -13,40 +13,58 @@ function scoreText(query: string, text: string): number {
   return qi === query.length ? 10 : 0;
 }
 
-function scoreTool(term: string, tool: ToolMeta): number {
+function scoreTool(term: string, tool: ToolMeta): { score: number; alias?: string } {
+  const aliases = tool.aliases ?? [];
   const fields: Array<[string, number]> = [
     [tool.name, 1.0],
-    ...(tool.aliases ?? []).map((a): [string, number] => [a, 0.95]),
+    ...aliases.map((a): [string, number] => [a, 0.95]),
     [categoryName(tool.category), 0.5],
     [tool.description, 0.4],
   ];
   let best = 0;
+  let alias: string | undefined;
   for (const [text, weight] of fields) {
     const s = scoreText(term, text) * weight;
     // Subsequence matches only count against the name, otherwise long descriptions match everything.
-    if (s > best && (scoreText(term, text) > 10 || text === tool.name)) best = s;
+    if (s > best && (scoreText(term, text) > 10 || text === tool.name)) {
+      best = s;
+      alias = aliases.includes(text) && text !== tool.name ? text : undefined;
+    }
   }
-  return best;
+  return { score: best, alias };
+}
+
+export interface SearchResult {
+  tool: ToolMeta;
+  /** The Alias that made this Tool match (for example "b64"), when an Alias rather than the name did. */
+  alias?: string;
 }
 
 /** Fuzzy search over Tools. Every whitespace-separated term must match something. */
 export function searchTools(query: string, tools: readonly ToolMeta[]): ToolMeta[] {
+  return searchToolsWithMatch(query, tools).map((r) => r.tool);
+}
+
+/** Like searchTools, but also reports which Alias (if any) produced each match. */
+export function searchToolsWithMatch(query: string, tools: readonly ToolMeta[]): SearchResult[] {
   const terms = query.trim().toLowerCase().split(/\s+/).filter(Boolean);
-  if (terms.length === 0) return [...tools];
+  if (terms.length === 0) return tools.map((tool) => ({ tool }));
   const priorityBoost = { P0: 3, P1: 2, P2: 1 } as const;
   // Search covers every Tool whatever the Developer tools switch says; on equal relevance, general Tools come first.
   const audienceRank = { general: 0, developer: 1 } as const;
   return tools
     .map((tool) => {
       let total = 0;
+      let alias: string | undefined;
       for (const term of terms) {
         const s = scoreTool(term, tool);
-        if (s === 0) return { tool, score: 0 };
-        total += s;
+        if (s.score === 0) return { tool, score: 0, alias };
+        total += s.score;
+        alias ??= s.alias;
       }
-      return { tool, score: total + priorityBoost[tool.priority] };
+      return { tool, score: total + priorityBoost[tool.priority], alias };
     })
     .filter((r) => r.score > 0)
     .sort((a, b) => b.score - a.score || audienceRank[a.tool.audience] - audienceRank[b.tool.audience] || a.tool.name.localeCompare(b.tool.name))
-    .map((r) => r.tool);
+    .map((r) => ({ tool: r.tool, alias: r.alias }));
 }

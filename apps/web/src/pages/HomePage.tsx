@@ -1,59 +1,31 @@
-import { useMemo, useState } from 'react';
-import { Search } from 'lucide-react';
+import { useState } from 'react';
 import { TOOLS, getTool } from '@/core/registry';
 import { browseCategories, browseCategoryTools } from '@/core/audience';
 import { categoryColour, type Category } from '@/core/categories';
-import { searchTools } from '@/core/search';
-import { Input } from '@/ui/shadcn/input';
+import type { ToolMeta } from '@/core/types';
 import { ToolCard } from '../components/ToolCard';
-import { SmartPaste } from '../components/SmartPaste';
+import { Bench } from '../components/Bench';
 import { useDeveloperTools } from '../audience';
 import { usePreferences } from '../theme';
 
 export function HomePage() {
-  const [query, setQuery] = useState('');
+  const [text, setText] = useState('');
   const { favourites, recent } = usePreferences();
   const [showDeveloper] = useDeveloperTools();
-  const results = useMemo(() => (query.trim() ? searchTools(query, TOOLS) : null), [query]);
   const favouriteTools = favourites.map(getTool).filter((t) => t !== undefined);
   const recentTools = recent.map(getTool).filter((t) => t !== undefined);
 
   return (
     <div className="flex flex-col gap-8">
       <section className="flex flex-col gap-4 pt-4">
-        <h1 className="font-serif text-2xl font-semibold tracking-tight sm:text-3xl">{TOOLS.length} developer tools. Nothing leaves your browser.</h1>
-        <div className="relative">
-          <Search className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground" />
-          <Input
-            autoFocus
-            type="search"
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            placeholder="Search tools, e.g. “jwt”, “b64”, “pdf merge”…"
-            aria-label="Search tools"
-            className="h-11 pl-9 text-base"
-            data-testid="home-search"
-          />
-        </div>
-        {!results && <SmartPaste />}
+        <h1 className="font-serif text-2xl font-semibold tracking-tight sm:text-3xl">Hello. What are we working on today?</h1>
+        <Bench text={text} onTextChange={setText} />
       </section>
 
-      {results ? (
-        <section aria-label="Search results">
-          {results.length ? (
-            <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
-              {results.map((t) => (
-                <ToolCard key={t.id} tool={t} detailed />
-              ))}
-            </div>
-          ) : (
-            <p className="text-sm text-muted-foreground">No Tools match “{query}”.</p>
-          )}
-        </section>
-      ) : (
+      {!text.trim() && (
         <>
-          {favouriteTools.length > 0 && <ToolGroup title="Favourites" tools={favouriteTools} />}
-          {recentTools.length > 0 && <ToolGroup title="Recent" tools={recentTools} />}
+          <ToolGroup title="Favourites" tools={favouriteTools} empty="Nothing pinned yet. Press the star on any Tool and it will wait for you here." />
+          <ToolGroup title="Recent" tools={recentTools} empty="Tools you open will show up here, so you can get back to them quickly." />
           {browseCategories(TOOLS, showDeveloper).map((c) => (
             <ToolGroup key={c.id} id={c.id} category={c} title={c.name} subtitle={c.description} tools={browseCategoryTools(TOOLS, c.id, showDeveloper)} />
           ))}
@@ -63,7 +35,7 @@ export function HomePage() {
   );
 }
 
-function ToolGroup({ id, category, title, subtitle, tools }: { id?: string; category?: Category; title: string; subtitle?: string; tools: readonly import('@/core/types').ToolMeta[] }) {
+function ToolGroup({ id, category, title, subtitle, tools, empty }: { id?: string; category?: Category; title: string; subtitle?: string; tools: readonly ToolMeta[]; empty?: string }) {
   const Icon = category?.icon;
   return (
     <section id={id} aria-labelledby={`${title}-h`} className="flex flex-col gap-3">
@@ -74,11 +46,15 @@ function ToolGroup({ id, category, title, subtitle, tools }: { id?: string; cate
         </h2>
         {subtitle && <span className="text-xs text-muted-foreground">{subtitle}</span>}
       </div>
-      <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
-        {tools.map((t) => (
-          <ToolCard key={t.id} tool={t} />
-        ))}
-      </div>
+      {tools.length ? (
+        <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+          {tools.map((t) => (
+            <ToolCard key={t.id} tool={t} />
+          ))}
+        </div>
+      ) : (
+        <p className="text-sm text-muted-foreground">{empty}</p>
+      )}
     </section>
   );
 }

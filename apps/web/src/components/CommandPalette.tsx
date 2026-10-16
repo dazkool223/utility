@@ -3,7 +3,7 @@ import { useLocation } from 'wouter';
 import { Command as CommandPrimitive } from 'cmdk';
 import { Eraser, Moon, Sparkles, Star, Wrench } from 'lucide-react';
 import { TOOLS, getToolByPath, toolsForKinds } from '@/core/registry';
-import { searchTools } from '@/core/search';
+import { searchToolsWithMatch } from '@/core/search';
 import { categoryColour, categoryIcon, categoryName } from '@/core/categories';
 import type { CategoryId } from '@/core/types';
 import { detectText } from '@/core/detect';
@@ -65,7 +65,7 @@ export function CommandPalette({ open, onOpenChange }: { open: boolean; onOpenCh
     return tools.length ? { label: KIND_LABEL[kinds[0]!] ?? kinds[0]!, tools } : null;
   }, [query]);
 
-  const results = useMemo(() => (smart ? [] : searchTools(query, TOOLS).slice(0, 30)), [query, smart]);
+  const results = useMemo(() => (smart ? [] : searchToolsWithMatch(query, TOOLS).slice(0, 30)), [query, smart]);
   const current = getToolByPath(location);
   const recentTools = recent.map((id) => TOOLS.find((t) => t.id === id)).filter((t) => t !== undefined);
   const favouriteTools = favourites.map((id) => TOOLS.find((t) => t.id === id)).filter((t) => t !== undefined);
@@ -119,10 +119,11 @@ export function CommandPalette({ open, onOpenChange }: { open: boolean; onOpenCh
             )}
             {results.length > 0 && (
               <CommandGroup heading={query ? 'Tools' : 'All Tools'}>
-                {results.map((t) => (
+                {results.map(({ tool: t, alias }) => (
                   <CommandItem key={t.id} value={t.id} onSelect={() => openTool(t.id)} data-testid={`palette-item-${t.id}`}>
                     <CategoryMark id={t.category} />
-                    <span className="flex-1 truncate">{t.name}</span>
+                    <span className="truncate">{t.name}</span>
+                    <span className="flex-1 truncate text-xs text-muted-foreground">{alias ?? ''}</span>
                     {t.audience === 'developer' && <DevTag />}
                     <CommandShortcut>{categoryName(t.category)}</CommandShortcut>
                   </CommandItem>

@@ -42,7 +42,7 @@ test('palette Smart Paste opens the Tool with the pasted data', async ({ page })
 
 test('home Smart Paste suggests Tools for pasted text', async ({ page }) => {
   await page.goto('/');
-  await page.getByTestId('smart-paste').fill('SGVsbG8sIHdvcmxkIQ==');
+  await page.getByTestId('home-search').fill('SGVsbG8sIHdvcmxkIQ==');
   await page.getByTestId('smart-base64-text').click();
   await expect(output(page)).toContainText('Hello, world!');
 });
@@ -124,6 +124,49 @@ test.describe('Category identity', () => {
   });
 });
 
+test.describe('Home bench', () => {
+  test('opens with a greeting and the search field focused', async ({ page }) => {
+    await page.goto('/');
+    await expect(page.getByRole('heading', { level: 1 })).toContainText('Hello');
+    await expect(page.getByTestId('home-search')).toBeFocused();
+  });
+
+  test('search shows the matched Alias and the Category', async ({ page }) => {
+    await page.goto('/');
+    await page.getByTestId('home-search').fill('b64');
+    const card = page.getByTestId('tool-card-base64-text');
+    await expect(card).toContainText('b64 →');
+    await expect(card).toContainText('Encoders & Decoders');
+  });
+
+  test('Enter on a short search opens the best match', async ({ page }) => {
+    await page.goto('/');
+    await page.getByTestId('home-search').fill('json formatter');
+    await page.keyboard.press('Enter');
+    await expect(page).toHaveURL(/\/json\/format$/);
+  });
+
+  test('Smart Paste stays visible while typing, and lists the best match first', async ({ page }) => {
+    await page.goto('/');
+    const smart = page.getByTestId('smart-paste-result');
+    await expect(smart).toBeVisible();
+    await page.getByTestId('home-search').fill('pdf');
+    await expect(smart).toBeVisible();
+    await page.getByTestId('home-search').fill('eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMjM0NTY3ODkwIn0.dozjgNryP4J3jVmNHl0w5N_XgL0n3I9PlFUP0THsR8U');
+    await expect(smart.getByRole('button').first()).toHaveAttribute('data-testid', 'smart-jwt-decode');
+    await smart.getByRole('button').first().click();
+    await expect(output(page)).toContainText('1234567890');
+  });
+
+  test('empty Favourites, empty Recent and no-match states have friendly copy', async ({ page }) => {
+    await page.goto('/');
+    await expect(page.getByRole('region', { name: 'Favourites' })).toContainText('Nothing pinned yet');
+    await expect(page.getByRole('region', { name: 'Recent' })).toContainText('Tools you open will show up here');
+    await page.getByTestId('home-search').fill('zzzqqqxxx');
+    await expect(page.getByText(/Nothing called/)).toBeVisible();
+  });
+});
+
 const rail = (page: Page) => page.getByRole('navigation', { name: 'Browse Tools' });
 
 test.describe('Persistent rail', () => {
@@ -136,7 +179,7 @@ test.describe('Persistent rail', () => {
       await expect(page.getByTestId('open-palette')).toHaveCount(0);
     }
     await page.goto('/');
-    await expect(page.getByRole('searchbox')).toHaveCount(1);
+    await expect(page.getByRole('textbox', { name: /Search Tools/ })).toHaveCount(1);
   });
 
   test('Categories in the rail respect the switch', async ({ page }) => {
@@ -220,7 +263,7 @@ test.describe('Developer tools switch', () => {
 
   test('Smart Paste suggests a developer Tool for a JWT', async ({ page }) => {
     await page.goto('/');
-    await page.getByTestId('smart-paste').fill('eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMjM0NTY3ODkwIn0.dozjgNryP4J3jVmNHl0w5N_XgL0n3I9PlFUP0THsR8U');
+    await page.getByTestId('home-search').fill('eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMjM0NTY3ODkwIn0.dozjgNryP4J3jVmNHl0w5N_XgL0n3I9PlFUP0THsR8U');
     await expect(page.getByTestId('smart-jwt-decode')).toBeVisible();
   });
 
